@@ -122,7 +122,7 @@ Significant decisions for ATLAS, with their rationale. Both agents append entrie
 
 ### DEC-014 · Domain contract conventions (FND-13 review)
 - **RPE:** 1 to 10 in half-point steps in Zod (the database CHECK only enforces 1 to 10, so Zod is stricter; imports and restores must validate with Zod). Closes the RPE item left open in DEC-013.
-- **Rest durations:** one range for per-exercise rest, the rest timer and the default rest setting: 0 to 1800 s (the timer itself needs 1 to 1800 s).
+- **Rest durations:** one range, 0 to 1800 s, for per-exercise rest and the default rest setting (0 = no rest; the settings schema uses the same schema, with round-trip tests at 0 and 1800). Only a running rest timer needs 1 to 1800 s.
 - **Errors:** `message` and `details` are safe to show. The low-level error is kept only in `Error.cause`. Services translate repository failures into `PERSISTENCE`; unexpected bugs surface as `INTERNAL` (not retryable). `SESSION_ACTIVE` is used when a delete targets the active session.
 - **Update schemas never carry defaults:** a partial update contains exactly the keys sent (Zod 4 would otherwise refill defaults and wipe fields).
 - **Ids:** Zod 4 `z.uuid()` rejects non-RFC ids (including the nil UUID); seed rows use real v4 ids and identify built-ins by `builtinKey`.

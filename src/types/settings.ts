@@ -2,14 +2,14 @@
 // these schemas and falls back to the default on missing or corrupt values (never throws).
 import { z } from 'zod';
 
-import { RestTimerSecondsSchema } from './domain';
+import { RestSecondsSchema } from './domain';
 import { THEME_MODES, WEIGHT_UNITS } from './enums';
 
 export const SettingsSchema = z.object({
   units: z.enum(WEIGHT_UNITS).default('kg'),
   theme: z.enum(THEME_MODES).default('dark'),
   notificationsEnabled: z.boolean().default(true),
-  defaultRestSeconds: RestTimerSecondsSchema.default(90),
+  defaultRestSeconds: RestSecondsSchema.default(90), // 0 = no rest (DEC-014)
 });
 
 export type Settings = z.infer<typeof SettingsSchema>;

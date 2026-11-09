@@ -50,7 +50,7 @@ Sources of truth (code):
 | `WorkoutSet` | `target*` (planned, copied at start), `weightKg`, `reps`, `rpe`, `durationSeconds`, `distanceM`, `isCompleted`, `completedAt` | `isCompleted` and `completedAt` agree; only completed sets count in summaries and analytics |
 | `WorkoutSummary` | `sessionId`, `name`, `startedAt`, `endedAt`, `durationMs`, `exerciseCount`, `completedSetCount`, `totalVolumeKg`, `records: PersonalRecord[]` (**draft**; always `[]` until ANL-03) | Volume = sum of `weightKg x reps` over completed weighted sets |
 | `HistoryItem` / `HistoryPage` | `WorkoutSummary` + `routineId`; `{ items, nextCursor }` | Newest first; `nextCursor === null` at the end |
-| `Settings` | `units` (kg/lb), `theme` (system/dark/light), `notificationsEnabled`, `defaultRestSeconds` (5-600) | Missing or corrupt stored values fall back to defaults (`parseSettings`); defaults: kg, dark, true, 90 |
+| `Settings` | `units` (kg/lb), `theme` (system/dark/light), `notificationsEnabled`, `defaultRestSeconds` (0-1800 s; 0 = no rest) | Missing or corrupt stored values fall back to defaults (`parseSettings`); defaults: kg, dark, true, 90 |
 
 Write models (inputs): `ExerciseInput`, `ExerciseUpdate`, `ExerciseFilter`, `RoutineInput` (array order = positions, no ids), `StartWorkoutInput`, `SetValuesInput` (partial; `null` clears a value).
 

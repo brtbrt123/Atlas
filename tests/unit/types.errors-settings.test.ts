@@ -58,15 +58,25 @@ describe('settings parsing', () => {
 
   it('falls back per key on corrupt JSON or invalid values, never throwing', () => {
     expect(
-      parseSettings({ units: '{oops', theme: '"neon"', defaultRestSeconds: '0', notificationsEnabled: '"yes"' }),
+      parseSettings({ units: '{oops', theme: '"neon"', defaultRestSeconds: '-1', notificationsEnabled: '"yes"' }),
     ).toEqual(DEFAULT_SETTINGS);
     expect(parseSettings({ units: '"lb"', theme: 'garbage' })).toEqual({ ...DEFAULT_SETTINGS, units: 'lb' });
+  });
+
+  it('round-trips the 0 and 1800 boundaries of default rest', () => {
+    for (const seconds of [0, 1800]) {
+      const stored = serializeSetting('defaultRestSeconds', seconds);
+      expect(parseSettings({ defaultRestSeconds: stored }).defaultRestSeconds).toBe(seconds);
+    }
+    expect(parseSettings({ defaultRestSeconds: '1801' }).defaultRestSeconds).toBe(90);
   });
 
   it('serializes validated values and rejects invalid ones', () => {
     expect(serializeSetting('units', 'lb')).toBe('"lb"');
     expect(serializeSetting('defaultRestSeconds', 75)).toBe('75');
-    expect(() => serializeSetting('defaultRestSeconds', 0)).toThrow();
+    expect(serializeSetting('defaultRestSeconds', 0)).toBe('0');
+    expect(serializeSetting('defaultRestSeconds', 1800)).toBe('1800');
+    expect(() => serializeSetting('defaultRestSeconds', -1)).toThrow();
     expect(() => serializeSetting('defaultRestSeconds', 1801)).toThrow();
   });
 });
