@@ -41,7 +41,7 @@ Sources of truth (code):
 
 | Type | Key fields | Invariants |
 |---|---|---|
-| `Exercise` | `id`, `builtinKey`, `name`, `equipment`, `trackingType`, `isCustom`, `isArchived`, `muscles[{muscle, role}]`, `notes` | Name 1-100 chars; muscle names lower-case; archived exercises are hidden unless `includeArchived` |
+| `Exercise` | `id`, `builtinKey`, `name`, `equipment`, `trackingType`, `isCustom`, `isArchived`, `muscles[{muscle, role}]`, `notes` | Name 1-100 chars; `muscle` is one of `MUSCLES` and `equipment` one of `EQUIPMENT` (fixed vocabularies, below); archived exercises are hidden unless `includeArchived` |
 | `Routine` | `id`, `name`, `notes`, `exercises: RoutineExercise[]` | At most 50 exercises, 50 sets each |
 | `RoutineExercise` | `id`, `exerciseId`, `exerciseName` (display join), `position`, `restSeconds`, `sets: RoutineSet[]` | |
 | `RoutineSet` | `position`, `setType`, `targetReps`, `targetWeightKg`, `targetDurationSeconds`, `targetDistanceM` | Targets >= 0 or `null` |
@@ -71,11 +71,20 @@ Behavioural guarantees (enforced and tested when implemented):
 - `start()` copies routine names and targets into the session; later routine edits do not change it.
 - Reordering uses the two-phase position update (DEC-013).
 
+## Exercise vocabularies (stable, EXL-01)
+
+Import from `src/types` (`MUSCLES`, `EQUIPMENT`, types `Muscle`, `Equipment`). Values are lower-case snake_case identifiers; the UI maps them to display labels.
+
+- **MUSCLES (19):** chest, upper_back, lats, lower_back, traps, shoulders, biceps, triceps, forearms, abs, obliques, glutes, quadriceps, hamstrings, calves, adductors, abductors, hip_flexors, neck. Anatomical groups only: `shoulders` is one group (delt heads are not split; final); cardio is expressed by the tracking type and full-body movements by several primaries, so there is no `cardio` or `full_body` value.
+- **EQUIPMENT (19):** barbell, dumbbell, kettlebell, machine, cable, smith_machine, ez_bar, trap_bar, plate, landmine, resistance_band, pull_up_bar, dip_station, suspension, sled, medicine_ball, bodyweight, cardio_machine, other. One value per exercise, no overlap: `null` = not specified; `bodyweight` = no external load (push-ups, planks); `pull_up_bar` = hanging movements (pull-ups, chin-ups); `dip_station` = dips; `other` = a real implement not listed. A bench is never the defining equipment (bench press is `barbell`).
+
+Values are only ever added, never renamed or removed (stored text). The database does not CHECK these columns (a CHECK would make additions a table rebuild); instead Zod validates every service input, import and restore, the built-in catalog is parsed through the schema in a test (EXL-02), and **the UI label map must fall back gracefully for an unknown value**. Each muscle may appear once per exercise (Zod rejects duplicates as `VALIDATION`).
+
 ## Stability labels (what Codex may rely on)
 
 | Stable (build against it) | Draft (will change; do not lock layouts) |
 |---|---|
-| Enums, `AtlasError` and its codes, conventions (kg, epoch ms, ids, positions), read models `Exercise`, `Routine`, `WorkoutSession`, `SessionExercise`, `WorkoutSet`, `Settings` | `muscle` / `equipment` vocabularies (free text until EXL-01); `PersonalRecord` and `records` (ANL-03); history set editing (\*, HST-02); `HistoryItem`; every service method until its feature task marks it done |
+| Enums, `AtlasError` and its codes, conventions (kg, epoch ms, ids, positions), read models `Exercise`, `Routine`, `WorkoutSession`, `SessionExercise`, `WorkoutSet`, `Settings` | `PersonalRecord` and `records` (ANL-03); history set editing (\*, HST-02); `HistoryItem`; every service method until its feature task marks it done |
 
 ## Planned contracts (not yet defined)
 
@@ -83,7 +92,7 @@ Behavioural guarantees (enforced and tested when implemented):
 |---|---|
 | Home data: weekly activity, most recent workout, resume (`HomeModel`) | HST-03 / HST-04 |
 | Previous performance per exercise (active workout "previous" column) and exercise recent history (detail screen) | WKT-06 / EXL-05 |
-| Filter vocabularies (list of muscles and equipment) | EXL-03 |
+| Filter chips are built from the exported `MUSCLES` and `EQUIPMENT` constants (no service call needed); search and filtering behaviour arrives with EXL-03 | EXL-03 |
 | Progress analytics (strength, volume, frequency, records) | ANL-05 |
 | Data export / import envelope, version and error codes | SET-03 / SET-04 |
 | Notifier port (`src/services/ports.ts`) is defined; the expo-notifications implementation arrives with WKT-05 | WKT-05 |

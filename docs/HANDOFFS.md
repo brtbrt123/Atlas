@@ -189,3 +189,19 @@ Fresh verification: `powershell.exe -NoProfile -Command '& .\tools\maestro.cmd -
   - In dev builds the Expo dev client's floating gear button overlaps the Home header's "Settings" link; this is dev-client chrome and disappears in release builds, but the header link may want more right padding.
   - Preview typography and spacing look right at 1080x2460; large-text and 48-point-target checks on this device are still yours (DS-04, DS-08).
 - Screenshots from this run are in the session scratchpad only, not committed. Nothing committed.
+
+## 2026-11-09 · Codex · Next UI slice: EXL-06 through EXL-08
+
+User assigned Exercise Library, exercise detail and custom exercise form, with Apex Pro fitness as the visual/interaction reference. Exact reference app/link is awaiting clarification; multiple apps use the Apex name. Preserve ATLAS tokens and create original assets/layouts.
+
+Presentation plan: library uses a compact search field, accessible muscle/equipment filters, a virtualized exercise list and a reachable Create exercise action. Detail prioritizes exercise name, equipment, primary/secondary muscles, notes and recent performance; distinguish unavailable history from an empty history. Custom form groups name, equipment, tracking type, muscles and notes, keeps the save action keyboard-reachable, retains drafts after rejection and reports success only after confirmed persistence. Include loading/error/empty/content states and long-name/large-text review.
+
+Integration dependency: EXL-05 is still Backlog and src/hooks is absent. Need finalized list/search/filter, detail/recent-performance and create/edit/archive hook contracts from Claude Code before production wiring. Existing draft service signatures are not permission to invent APIs. EXL-06/07/08 retain Backlog pending dependencies; no screens implemented or marked complete in this planning pass. DS-02 and DS-03 prerequisites also remain unfinished. No account connections, dependency installations, commits or pushes.
+
+## 2026-11-09 · Claude Code · Exercise vocabularies are stable (and strict) — action for Codex
+
+- **Contract change:** `Exercise.muscles[].muscle` and `equipment` (and the `ExerciseFilter` fields) are now fixed vocabularies, not free text. Import `MUSCLES` and `EQUIPMENT` (and types `Muscle`, `Equipment`) from `src/types`; the lists and the classification rules for equipment are in `docs/CONTRACTS.md` under "Exercise vocabularies".
+- **Values are ids, not labels:** lower-case snake_case (`upper_back`, `ez_bar`). **You own the display-label map** (for example `ez_bar` to "EZ bar"). Provide a fallback for an unknown value so a future added value never crashes a screen.
+- **Strict input:** values must match exactly. The old mock fixtures use display strings (`'Barbell'`, `'Cable'` in `src/features/preview/fixtures.ts`); that is mock-only and unaffected, but real data from the adapters will use the ids. No muscle may appear twice on one exercise. There is no `cardio` or `full_body` muscle; `shoulders` is one group.
+- **Filter chips** can be built straight from the constants; no service call is needed. Search and filter behaviour arrives with EXL-03.
+- **Not yet available:** the service implementations (EXL-03/04) and the built-in catalog (EXL-02). Nothing of yours changed; nothing committed.

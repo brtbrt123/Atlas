@@ -33,7 +33,7 @@ describe('primitives', () => {
 
 describe('exercise input', () => {
   it('applies defaults and normalizes text', () => {
-    const parsed = ExerciseInputSchema.parse({ name: '  Bench Press ', muscles: [{ muscle: ' Chest ', role: 'primary' }] });
+    const parsed = ExerciseInputSchema.parse({ name: '  Bench Press ', muscles: [{ muscle: 'chest', role: 'primary' }] });
     expect(parsed).toEqual({
       name: 'Bench Press',
       equipment: null,
@@ -41,6 +41,24 @@ describe('exercise input', () => {
       notes: null,
       muscles: [{ muscle: 'chest', role: 'primary' }],
     });
+  });
+
+  it('accepts only the fixed muscle and equipment vocabularies', () => {
+    expect(ExerciseInputSchema.safeParse({ name: 'X', equipment: 'barbell', muscles: [{ muscle: 'quadriceps', role: 'primary' }] }).success).toBe(true);
+    expect(ExerciseInputSchema.safeParse({ name: 'X', equipment: 'jetpack' }).success).toBe(false);
+    expect(ExerciseInputSchema.safeParse({ name: 'X', muscles: [{ muscle: 'Chest ', role: 'primary' }] }).success).toBe(false);
+    expect(ExerciseInputSchema.safeParse({ name: 'X', muscles: [{ muscle: 'wings', role: 'primary' }] }).success).toBe(false);
+  });
+
+  it('rejects the same muscle listed twice and non-muscle values', () => {
+    const twice = ExerciseInputSchema.safeParse({ name: 'X', muscles: [{ muscle: 'chest', role: 'primary' }, { muscle: 'chest', role: 'secondary' }] });
+    expect(twice.success).toBe(false);
+    expect(ExerciseUpdateSchema.safeParse({ muscles: [{ muscle: 'abs', role: 'primary' }, { muscle: 'abs', role: 'primary' }] }).success).toBe(false);
+    for (const notAMuscle of ['cardio', 'full_body']) {
+      expect(ExerciseInputSchema.safeParse({ name: 'X', muscles: [{ muscle: notAMuscle, role: 'primary' }] }).success).toBe(false);
+    }
+    expect(ExerciseInputSchema.safeParse({ name: 'X', equipment: 'bench' }).success).toBe(false);
+    expect(ExerciseInputSchema.safeParse({ name: 'X', equipment: 'landmine' }).success).toBe(true);
   });
 
   it('rejects blank names, bad tracking types and bad muscle roles', () => {
@@ -66,7 +84,7 @@ describe('exercise input', () => {
       isCustom: true,
       isArchived: false,
       notes: null,
-      muscles: [{ muscle: 'back', role: 'primary' }],
+      muscles: [{ muscle: 'lats', role: 'primary' }],
       createdAt: 1,
       updatedAt: 2,
     };

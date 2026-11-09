@@ -49,6 +49,18 @@ FK-safe migrations (FKs off around `migrate()` + `foreign_key_check`), two-phase
 - Layering: `useDb()` returns the drizzle instance for adapter hooks and service wiring only. ESLint (`no-restricted-imports`) forbids `src/features`, `src/components` and `src/theme` from importing `src/database`, `src/services`, `expo-sqlite` or `drizzle-orm`.
 - To change the schema: edit `schema.ts`, `npx drizzle-kit generate`, review the SQL, add a populated-data test if it rebuilds a table.
 
+## Repositories (EXL-01 onward)
+
+- Live in `src/database/repositories/`, built by factories such as `createExerciseRepository(db)` that take the drizzle instance (`AtlasDb`, `src/database/types.ts`). Pure persistence: no Zod, no clock, no id generation; services validate input, generate ids and timestamps and translate database errors into `AtlasError`.
+- The drizzle expo-sqlite driver is **synchronous**, so repositories use the sync API (`.all()`, `.get()`, `.run()`, sync `db.transaction`). Keep individual operations small (a bulk seed or import needs chunking or a background strategy decided in its own task).
+- Repositories take an `AtlasExecutor` (`BaseSQLiteDatabase<'sync', ...>`), so they accept the top-level database **or a transaction handle**. A service that writes through several repositories wraps them in one `db.transaction((tx) => { const a = createXRepository(tx); ... })`; a repository's own transaction inside it becomes a savepoint, so both layers stay atomic (tested).
+- Multi-row writes are single transactions (verified atomic by tests: a failing muscle link rolls back the exercise insert or update).
+- Patch rule for every repository: `undefined`/absent = unchanged, `null` = clear. No `this` in repositories (methods work when detached). Use `.limit(1)` with `.get()`.
+- Never pass an `async` callback to `db.transaction` (Drizzle commits as soon as the callback returns its promise), and do not use the expo-sqlite async API on the drizzle connection after startup (DEC-018).
+- Tests run the **real drizzle expo driver** in Node: `tests/helpers/drizzleDb.ts` fakes the three expo-sqlite methods the driver calls over `node:sqlite`, on a database built from the shipped migrations.
+- Error translation (services, EXL-04): match only the SQLite message text (`UNIQUE constraint failed: <table>.<col>`, `FOREIGN KEY constraint failed`, `CHECK constraint failed: <name>`); expo-sqlite throws plain errors like "Error code 19: UNIQUE constraint failed: ..." with no `errcode` property, and the test fake reproduces that shape.
+- `ExerciseRepository`: `create`, `findById`, `findByBuiltinKey`, `list({ includeArchived })`, `update(id, patch, now)` (only the keys sent; `muscles` replaces all links; an empty patch changes nothing), `setArchived(id, archived, now)`. Hard delete and search/filter arrive with EXL-04 and EXL-03.
+
 ## Notes for service authors
 
 - `position` columns have unique indexes. Reordering must not collide mid-update: use a two-step shift (move to a temporary offset, then to final positions) inside one transaction.

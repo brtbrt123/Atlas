@@ -7,6 +7,7 @@ Verified changes to ATLAS, newest first. Each entry names its author and the tas
 ### 2026-11-09
 
 #### Added
+- **EXL-01** (Claude Code): exercise repository (create, read, list, partial update with muscle replacement, archive) over the real drizzle expo driver, transaction-composable; fixed `MUSCLES` and `EQUIPMENT` vocabularies in `src/types`; DEC-018; tests run on a fake of three expo-sqlite methods over node:sqlite. Review fixes applied; all checks pass. Not run on a device.
 - **FND-15** (Claude Code): first local debug build of ATLAS installed and run on the Infinix X695 (Android 11, arm64) at no cost: tab shell renders, Codex's dev-only UI preview renders with its mock-data banner, and the migration was verified inside the on-device database (9 tables, `0000_init`, WAL, clean `foreign_key_check`). Build recipe and Windows/network workarounds in `scripts/android/`, `docs/TOOLING.md` and DEC-016.
 - **FND-14** (Shared, verified by Claude Code): Codex's isolated UI preview mounted at the development-only route `/dev/preview` (unmodified, mock-data banner kept), with a dev-only link on Home. Production bundles exclude it (checked in the exported bundle). 3 tests; tsc, lint and 89 tests pass.
 - Android dev build prepared (not built): `expo prebuild` generated the git-ignored `android/` project; toolchain audit and the single-architecture build command are in `docs/TOOLING.md`.

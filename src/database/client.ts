@@ -4,12 +4,13 @@ import { openDatabaseAsync, type SQLiteDatabase } from 'expo-sqlite';
 
 import bundle from '../../drizzle/migrations';
 import { schema } from './schema';
+import type { AtlasDb } from './types';
 import { configureConnection, runMigrations, type MigrationBundle, type SqlDatabase } from './migrate';
 import { singleFlight } from './singleFlight';
 
 export const DATABASE_NAME = 'atlas.db';
 
-export type AtlasDb = ReturnType<typeof createDrizzle>;
+export type { AtlasDb } from './types';
 
 export function createDrizzle(sqlite: SQLiteDatabase) {
   return drizzle(sqlite, { schema });

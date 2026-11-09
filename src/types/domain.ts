@@ -3,7 +3,7 @@
 // display/input edge (SET-02). Times are epoch milliseconds (UTC). Ids are UUID v4 strings.
 import { z } from 'zod';
 
-import { MUSCLE_ROLES, SESSION_STATUSES, SET_TYPES, TRACKING_TYPES } from './enums';
+import { EQUIPMENT, MUSCLE_ROLES, MUSCLES, SESSION_STATUSES, SET_TYPES, TRACKING_TYPES } from './enums';
 
 // ---------------------------------------------------------------- primitives
 
@@ -23,6 +23,8 @@ const NameSchema = z.string().trim().min(1).max(100);
 const NotesSchema = z.string().trim().max(2000);
 
 export const TrackingTypeSchema = z.enum(TRACKING_TYPES);
+export const MuscleSchema = z.enum(MUSCLES);
+export const EquipmentSchema = z.enum(EQUIPMENT);
 export const MuscleRoleSchema = z.enum(MUSCLE_ROLES);
 export const SetTypeSchema = z.enum(SET_TYPES);
 export const SessionStatusSchema = z.enum(SESSION_STATUSES);
@@ -30,7 +32,7 @@ export const SessionStatusSchema = z.enum(SESSION_STATUSES);
 // ------------------------------------------------------------------ exercises
 
 export const ExerciseMuscleSchema = z.object({
-  muscle: z.string().trim().toLowerCase().min(1).max(50),
+  muscle: MuscleSchema,
   role: MuscleRoleSchema,
 });
 
@@ -38,7 +40,7 @@ export const ExerciseSchema = z.object({
   id: IdSchema,
   builtinKey: z.string().nullable(),
   name: NameSchema,
-  equipment: z.string().trim().max(50).nullable(),
+  equipment: EquipmentSchema.nullable(),
   trackingType: TrackingTypeSchema,
   isCustom: z.boolean(),
   isArchived: z.boolean(),
@@ -48,13 +50,18 @@ export const ExerciseSchema = z.object({
   updatedAt: EpochMsSchema,
 });
 
-// `muscle` and `equipment` are free text until the vocabularies are fixed in EXL-01 (unstable).
 const ExerciseFields = {
   name: NameSchema,
-  equipment: z.string().trim().max(50).nullable(),
+  equipment: EquipmentSchema.nullable(),
   trackingType: TrackingTypeSchema,
   notes: NotesSchema.nullable(),
-  muscles: z.array(ExerciseMuscleSchema),
+  muscles: z.array(ExerciseMuscleSchema).superRefine((muscles, ctx) => {
+    const seen = new Set<string>();
+    muscles.forEach((m, index) => {
+      if (seen.has(m.muscle)) ctx.addIssue({ code: 'custom', message: 'Each muscle can be listed only once', path: [index, 'muscle'] });
+      seen.add(m.muscle);
+    });
+  }),
 };
 
 /** Create: defaults fill omitted fields. */
@@ -71,8 +78,8 @@ export const ExerciseUpdateSchema = z.object(ExerciseFields).partial();
 
 export const ExerciseFilterSchema = z.object({
   query: z.string().trim().max(100).optional(),
-  muscle: z.string().trim().toLowerCase().optional(),
-  equipment: z.string().trim().optional(),
+  muscle: MuscleSchema.optional(),
+  equipment: EquipmentSchema.optional(),
   includeArchived: z.boolean().default(false),
 });
 
