@@ -7,7 +7,7 @@ Two agents work in this repository for one human developer. Neither agent change
 | Path / area | Owner |
 |---|---|
 | `package.json`, lockfile, `app.json`/`app.config.*`, `babel.config.*`, `metro.config.*`, `tailwind.config.*`, `tsconfig.json`, `eslint.config.*`, `jest.config.*`, `drizzle.config.*`, `eas.json` | Claude Code |
-| `app/**` (routes, layouts, route groups) | Claude Code |
+| `app/**` (routes, layouts, route groups), `src/navigation/**` (route placeholders and navigation helpers) | Claude Code |
 | `src/database/**`, `src/services/**`, `src/stores/**`, `src/types/**`, `src/hooks/**` | Claude Code |
 | `drizzle/**` migrations, `tests/unit/**`, `tests/integration/**` | Claude Code |
 | `docs/CONTRACTS.md`, `docs/ARCHITECTURE.md`, `docs/DATABASE.md`, `docs/TOOLING.md` | Claude Code (Codex may propose via HANDOFFS) |

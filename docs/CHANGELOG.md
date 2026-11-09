@@ -7,6 +7,7 @@ Verified changes to ATLAS, newest first. Each entry names its author and the tas
 ### 2026-11-09
 
 #### Added
+- **FND-09** (Claude Code): Expo Router skeleton: 5 tabs (Home, Exercises, Routines, History, Progress), Settings, active workout, routine and exercise detail routes with typed routes, placeholder screens and a route map in `docs/CONTRACTS.md`. 12 navigation tests; tsc, lint, 66 tests and the Android bundle export pass. Not run on a device.
 - **FND-13** (Claude Code, In Review): domain contracts v1 (Zod schemas, `AtlasError`, settings parsing, service interfaces, ports), `docs/CONTRACTS.md`, `docs/ARCHITECTURE.md`, DEC-013/DEC-014. 21 new unit tests; all checks pass. Pending Codex acknowledgement.
 - **FND-12** (Claude Code): in-memory SQLite test harness using the app's generated migrations, 26 integration tests (schema constraints, one-active-workout, history independence, FK-safe table-rebuild policy). Jest loads `.sql` via a transformer. `npm test -- --runInBand`: 4 suites, 33 tests pass.
 - **FND-10** (Claude Code): Drizzle schema for the nine spec tables (`src/database/schema.ts`), `drizzle.config.ts`, generated migration `drizzle/0000_init.sql`, `docs/DATABASE.md`; DEC-013 database policies. Verified: `drizzle-kit check`, 28 constraint checks on real SQLite, tsc/lint/tests pass, architecture review fixes applied.
