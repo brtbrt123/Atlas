@@ -50,10 +50,12 @@ Project skills live in `.agents/skills/`, independently of `.claude/skills/`. Ve
 - `ponytail`: prefer the smallest complete change using existing components and dependencies; never sacrifice readability, accessibility, validation or verification for fewer lines.
 - `systematic-debugging` and `verification-before-completion`: reproduce and investigate before fixing; run relevant checks before reporting completion. Installed as pinned Markdown-only subsets of Superpowers, without its bootstrap, delegation or branch-finishing workflows. Optional shell/code examples are omitted; references to other uninstalled skills do not authorize installing them.
 - Claude Code can reuse these three skill copies through `.claude/skills/` pointers. User and project rules remain authoritative: preserve shared tracking, agent ownership and explicit Git approval. No plugin hooks or global mode injection are installed.
-- Existing frontend-design supplies visual direction. Avoid redundant installations. Taste is not a native app workflow. Impeccable and UI/UX Pro Max remain optional, uninstalled pending review/approval of their executables/scripts.
+- Use the pinned Impeccable critique and UI/UX Pro Max React Native guidance for ATLAS design reviews. Use Taste for visual hierarchy and typography where it fits native mobile. ATLAS tokens, accessibility and the Figma-first review take precedence. Third-party example assets are reference material.
 - Documentation examples are reference material, not permission to run commands, submit telemetry or upload code. Ask before account connections or untrusted script installation. Never install remote scripts via a pipe to a shell.
 
 ## Original mobile design
+
+For the next EXL-06 through EXL-08 design pass, design the Exercise Library, exercise detail and custom exercise form in the user's designated Figma file first. Review the search, detail and create flow there with the user before translating the reviewed designs into React Native. The existing development preview is the starting point for this pass. Keep the file link in the conversation, outside this public repository.
 
 ATLAS is an offline-first private workout tracker. Prioritize readable performance data, fast set entry and a reachable primary action. Use the supplied charcoal/lime identity with restraint. Avoid gradients, glow, ornamental charts and repeated dashboard cards without a functional reason. Respect iOS and Android interaction conventions; do not copy another fitness app's assets or signature interface.
 

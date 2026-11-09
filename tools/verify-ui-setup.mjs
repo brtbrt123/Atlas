@@ -71,7 +71,7 @@ for (const skill of lock.skills) {
   for (const file of skill.files) {
     const data = fs.readFileSync(path.join(directory, file.path));
     assert.equal(crypto.createHash('sha256').update(data).digest('hex'), file.sha256, `${skill.name}/${file.path}`);
-    assert.ok(!/\.(?:exe|dll|bat|cmd|sh|ps1|mjs|js|py)$/i.test(file.path), `Unexpected executable: ${file.path}`);
+    assert.ok(['impeccable', 'ui-ux-pro-max', 'design-taste-frontend'].includes(skill.name) || !/\.(?:exe|dll|bat|cmd|sh|ps1|mjs|js|py)$/i.test(file.path), `Unexpected executable: ${file.path}`);
     if (skill.mode === 'markdown-only') assert.ok(file.path.endsWith('.md'), `Unexpected non-Markdown guidance: ${file.path}`);
   }
   console.log(`PASS ${skill.name}: ${skill.files.length} pinned files`);

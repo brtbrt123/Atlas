@@ -88,3 +88,7 @@ The current [Maestro installation documentation](https://docs.maestro.dev/maestr
 2. Claude Code provides the Expo foundation, dependency versions, navigation/state ownership, shared contracts and development build/device path.
 3. Optionally authorize Figma/Expo account connections and separately decide whether Impeccable or UI/UX Pro Max merits executable tooling; Taste is unnecessary for native scope.
 4. After integration, run the configured checks and the native matrix in `UI_REVIEW.md`; verify the new project skills appear in the next-turn selector.
+
+## Approved design skill installation · 9 November 2026
+
+Impeccable, UI/UX Pro Max and Taste (design-taste-frontend) are now installed in the project Codex skill root. This supersedes their earlier audit statuses. Exact source revisions, licenses and file hashes are in skills.lock.json. UI/UX Pro Max uses its upstream Codex template with a project-relative search path. Taste includes a substantial web reference library. Use native-relevant guidance for ATLAS.

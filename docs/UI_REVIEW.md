@@ -32,3 +32,7 @@ Observed issues:
 - Opening a numeric field displayed the keyboard while the focused input remained below the visible content. Capture: `10-keyboard.png` in the temporary review folder. Keyboard focus/scroll handling needs investigation before acceptance.
 
 Numeric keyboard appearance was exercised; no values or personal phone settings were changed. Save failure/retry and persistence were not verified. Large text, TalkBack, landscape, reduced motion and iOS remain untested. DS-02 remains In Review; the full DS-08 review is incomplete. No application source changes, commits or pushes were made.
+
+## 2026-11-09 · EXL-06/07/08 presentation review
+
+Native default portrait screenshots of the new mock Exercise Library, detail and create form reviewed on Infinix X695 / Android 11 / 360 logical width / font scale 1.0. Evidence: `.ui-review/2026-11-09/exercises/`. Text wraps without truncating exercise names; primary/secondary muscles and equipment are explicitly labeled; create/save actions have scalable 48-unit minimum targets. Development tools collapse to one disclosure. The Expo floating gear overlaps some preview content and is development chrome. Large gaps in detail and filter choice density warrant further large-text/size review before acceptance. Native form keyboard testing was inconclusive; do not treat the extra temporary keyboard capture as a passing keyboard check. No final native accessibility or persistence claim.
