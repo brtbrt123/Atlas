@@ -1,6 +1,6 @@
 # Native UI verification plan
 
-Status: planned, not executed. Setup approved by the user on 9 November 2026; runtime UI verification still awaits the application foundation and device path. This is a checklist, not a passing test report or executable Maestro flow.
+Status: partial verification on 9 November 2026. The Expo foundation now exists. `tests/ui/primitives.test.tsx` passes six RNTL checks; full project tests pass seven checks across two suites, with typecheck/lint also passing. Native screenshot, large-text and assistive-technology checks remain unexecuted and require a mounted preview/device path. The checklist below is not a passing device report or executable Maestro flow.
 
 ## Component behavior
 
