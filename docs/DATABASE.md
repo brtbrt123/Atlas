@@ -34,9 +34,9 @@ Owner: Claude Code. Source of truth: `src/database/schema.ts`; generated migrati
 - No orphan rows: foreign keys on, cascades only downward within a session or routine.
 - Analytics read only `is_completed = 1` sets of `completed` sessions (a service-level rule; analytics reach sets through `session_exercise_id`).
 
-## Policies (DEC-012)
+## Policies (DEC-013)
 
-FK-safe migrations (FKs off around `migrate()` + `foreign_key_check`), two-phase reorder, clamped finish time, live muscle attribution. See `docs/DECISIONS.md` DEC-012.
+FK-safe migrations (FKs off around `migrate()` + `foreign_key_check`), two-phase reorder, clamped finish time, live muscle attribution. See `docs/DECISIONS.md` DEC-013.
 
 ## Notes for service authors
 
@@ -47,5 +47,5 @@ FK-safe migrations (FKs off around `migrate()` + `foreign_key_check`), two-phase
 ## Verification (2026-11-09)
 
 - `npx drizzle-kit generate` produced `0000_init.sql`; `npx drizzle-kit check` passed.
-- The migration was applied to a real in-memory SQLite (Node's `node:sqlite`) and 28 constraint checks passed (after the architecture review fixes, DEC-012): table count, CHECK rejections (blank name, bad enum, RPE 11, negative values, ended-before-started, active session with end time, completed set without time), FK and unique rejections, restrict on used exercise, one-active-workout, set-null snapshots after routine/exercise deletion, cascade on session delete.
+- The migration was applied to a real in-memory SQLite (Node's `node:sqlite`) and 28 constraint checks passed (after the architecture review fixes, DEC-013): table count, CHECK rejections (blank name, bad enum, RPE 11, negative values, ended-before-started, active session with end time, completed set without time), FK and unique rejections, restrict on used exercise, one-active-workout, set-null snapshots after routine/exercise deletion, cascade on session delete.
 - The ad hoc checks are now project tests (FND-12): `tests/integration/schema.constraints.test.ts` and `tests/integration/migrations.rebuild.test.ts`, run by `npm test`, using `tests/helpers/testDb.ts` (in-memory SQLite built from `drizzle/migrations.js`). The startup migration runner is FND-11.

@@ -21,15 +21,12 @@ import {
   uniqueIndex,
 } from 'drizzle-orm/sqlite-core';
 
-export const TRACKING_TYPES = ['weight_reps', 'bodyweight_reps', 'duration', 'distance_duration'] as const;
-export const MUSCLE_ROLES = ['primary', 'secondary'] as const;
-export const SET_TYPES = ['normal', 'warmup', 'drop', 'failure'] as const;
-export const SESSION_STATUSES = ['active', 'completed'] as const;
-
-export type TrackingType = (typeof TRACKING_TYPES)[number];
-export type MuscleRole = (typeof MUSCLE_ROLES)[number];
-export type SetType = (typeof SET_TYPES)[number];
-export type SessionStatus = (typeof SESSION_STATUSES)[number];
+import {
+  MUSCLE_ROLES,
+  SESSION_STATUSES,
+  SET_TYPES,
+  TRACKING_TYPES,
+} from '../types/enums';
 
 const inList = (column: string, values: readonly string[]) =>
   sql.raw(`${column} IN (${values.map((v) => `'${v}'`).join(', ')})`);

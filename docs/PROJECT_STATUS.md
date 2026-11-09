@@ -12,7 +12,7 @@ _Generated 2026-11-09 from `docs/FEATURE_TRACKER.md`. Progress = Done tasks ÷ a
 
 | Milestone | Done | Total | Progress | Ready | In Progress | In Review | Blocked | Backlog |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| M1 · Project Foundation | 8 | 16 | 50.0% | 2 | 0 | 1 | 1 | 4 |
+| M1 · Project Foundation | 8 | 16 | 50.0% | 2 | 0 | 2 | 1 | 3 |
 | M2 · Design System | 1 | 8 | 12.5% | 0 | 0 | 1 | 0 | 6 |
 | M3 · Exercise Library | 0 | 9 | 0.0% | 0 | 0 | 0 | 0 | 9 |
 | M4 · Routine Management | 0 | 7 | 0.0% | 0 | 0 | 0 | 0 | 7 |
@@ -22,7 +22,7 @@ _Generated 2026-11-09 from `docs/FEATURE_TRACKER.md`. Progress = Done tasks ÷ a
 | M8 · Settings and Data Management | 0 | 6 | 0.0% | 0 | 0 | 0 | 0 | 6 |
 | M9 · Testing and Optimization | 0 | 6 | 0.0% | 0 | 0 | 0 | 0 | 6 |
 | M10 · Private Android and iOS Distribution | 0 | 6 | 0.0% | 0 | 0 | 0 | 1 | 5 |
-| **All** | **9** | **82** | **11.0%** | **2** | **0** | **2** | **2** | **67** |
+| **All** | **9** | **82** | **11.0%** | **2** | **0** | **3** | **2** | **66** |
 
 ### Blocked
 
@@ -32,6 +32,7 @@ _Generated 2026-11-09 from `docs/FEATURE_TRACKER.md`. Progress = Done tasks ÷ a
 ### In progress / in review
 
 - **FND-03** (Codex, In Review) Codex harness: AGENTS.md, pinned `.agents/skills`, UI_ENVIRONMENT/UI_REVIEW docs, project-local Maestro
+- **FND-13** (Claude Code, In Review) Domain contracts v1: Zod schemas and types, `Result`/`AtlasError`, service interfaces; CONTRACTS, ARCHITECTURE and DATABASE docs
 - **DS-02** (Codex, In Review) Core primitives: Type, Button, Card, Screen, Section, Feedback with variants, disabled/busy states and accessibility roles
 
 ### Ready to start

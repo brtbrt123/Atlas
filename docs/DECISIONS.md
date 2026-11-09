@@ -16,7 +16,8 @@ Significant decisions for ATLAS, with their rationale. Both agents append entrie
 | DEC-008 | 2026-11-09 | Global TypeScript pinned to major 6 for the language server | Tooling | Accepted | Claude Code |
 | DEC-009 | 2026-11-09 | Use the `gh` CLI; no GitHub MCP server | Tooling | Accepted | Claude Code |
 | DEC-011 | 2026-11-09 | Zero-cost development: Android local APK; iPhone route unresolved | Process | Accepted | User |
-| DEC-012 | 2026-11-09 | Database policies: FK-safe migrations, two-phase reorder, clock clamp, live muscle attribution | Engineering | Accepted | Claude Code (from architecture review) |
+| DEC-013 | 2026-11-09 | Database policies: FK-safe migrations, two-phase reorder, clock clamp, live muscle attribution | Engineering | Accepted | Claude Code (from architecture review) |
+| DEC-014 | 2026-11-09 | Domain contract conventions: RPE half steps, one rest range, safe errors, update schemas without defaults | Engineering | Accepted | Claude Code (from architecture review) |
 | DEC-010 | 2026-11-09 | GitHub Projects board as an optional one-way mirror of the tracker | Process | Proposed | Claude Code |
 | DEC-012 | 2026-11-09 | Use 48-unit minimum touch targets and semantic component recipes | UI/UX | Accepted | Codex |
 
@@ -111,10 +112,18 @@ Significant decisions for ATLAS, with their rationale. Both agents append entrie
 - **Decision:** Use at least 48 logical units for action targets on both platforms, tokenized scalable type/line heights, and shared semantic button/card/input recipes. Keep busy action labels readable and stable while exposing disabled/busy state; never depend on spinner or color alone.
 - **Consequences:** Components reuse one token source without adding a library. Typecheck, token contrast and component behavior checks passed; native text scaling, safe areas and assistive technology still require device review. This decision does not mark DS-02 or the screen drafts Done.
 
-### DEC-012 · Database policies from the FND-10 architecture review
+### DEC-013 · Database policies from the FND-10 architecture review
 - **Migrations that rebuild a table** (SQLite can't alter CHECKs, so adding an enum value rebuilds the table): the migrator runs in one transaction where `PRAGMA foreign_keys` is ignored, so with FKs on, dropping the old table would cascade-delete or null out child rows (history!). **Policy:** the startup runner (FND-11) sets `PRAGMA foreign_keys=OFF` before `migrate()`, runs `PRAGMA foreign_key_check` (fail on rows), then turns FKs on. FND-12 must include a populated-data rebuild-migration test. Never ship a rebuild migration without it.
 - **Reordering** (unique `position` indexes + `position >= 0` checks): services use a two-phase update in one transaction: shift affected rows by +1,000,000, then write final positions. Tests for swap, move-to-front, insert-in-middle (RTN-03, WKT-02).
 - **Clock changes:** the finish service clamps `ended_at = max(now, started_at)` so the end-time CHECK can never block finishing a workout (WKT-04 test).
 - **Muscle attribution is live:** volume-by-muscle joins `exercise_muscles` at query time; history rows themselves are snapshotted. The exercise service refuses hard-delete when history exists (archive instead) and warns on muscle edits (EXL-04 test).
 - **Added in schema before first use:** `workout_sets.target_*` (plan vs actual, WKT-01), `workout_sessions.rest_timer_ends_at` (WKT-05), `exercises.builtin_key` unique (idempotent seeding, EXL-02), FK-child indexes, `(status, started_at)` index, two-way completed/`completed_at` check.
 - **Open for downstream tasks:** muscle/equipment vocabularies as Zod enums (EXL-01); RPE step size (Zod); bodyweight volume semantics (ANL-01/02); reject tracking-type change when routine targets exist (EXL-04); `.sql` loading for Metro/Jest (FND-11/12).
+
+### DEC-014 · Domain contract conventions (FND-13 review)
+- **RPE:** 1 to 10 in half-point steps in Zod (the database CHECK only enforces 1 to 10, so Zod is stricter; imports and restores must validate with Zod). Closes the RPE item left open in DEC-013.
+- **Rest durations:** one range for per-exercise rest, the rest timer and the default rest setting: 0 to 1800 s (the timer itself needs 1 to 1800 s).
+- **Errors:** `message` and `details` are safe to show. The low-level error is kept only in `Error.cause`. Services translate repository failures into `PERSISTENCE`; unexpected bugs surface as `INTERNAL` (not retryable). `SESSION_ACTIVE` is used when a delete targets the active session.
+- **Update schemas never carry defaults:** a partial update contains exactly the keys sent (Zod 4 would otherwise refill defaults and wipe fields).
+- **Ids:** Zod 4 `z.uuid()` rejects non-RFC ids (including the nil UUID); seed rows use real v4 ids and identify built-ins by `builtinKey`.
+- **Read schemas vs stored rows:** domain schemas trim and limit text (names 1-100). Restore/import code must validate and normalize rows, not assume stored text already fits.

@@ -1,5 +1,5 @@
 /** @jest-environment node */
-// DEC-012: SQLite cannot alter CHECK constraints, so adding an enum value (e.g. a new tracking
+// DEC-013: SQLite cannot alter CHECK constraints, so adding an enum value (e.g. a new tracking
 // type) makes drizzle-kit emit a table REBUILD. Run inside a transaction with foreign keys ON,
 // dropping the old parent table cascades/nulls child rows, destroying workout history.
 // These tests pin both the hazard and the policy (FKs off around migrate + foreign_key_check)
@@ -28,7 +28,7 @@ const REBUILD_EXERCISES = [
   'CREATE UNIQUE INDEX `exercises_builtin_key_uq` ON `exercises` (`builtin_key`)',
 ];
 
-/** The policy the startup runner must follow (DEC-012). */
+/** The policy the startup runner must follow (DEC-013). */
 function applyFkSafe(db: TestDb, statements: string[]) {
   db.exec('PRAGMA foreign_keys = OFF');
   try {
