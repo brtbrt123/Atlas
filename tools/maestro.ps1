@@ -6,6 +6,23 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+
+function Get-AtlasJavaVersion([string]$JavaPath) {
+    # Windows PowerShell 5.1 treats java's stderr version banner as a native error.
+    $atlasProbe = New-Object System.Diagnostics.Process
+    $atlasProbe.StartInfo.FileName = $JavaPath
+    $atlasProbe.StartInfo.Arguments = '-version'
+    $atlasProbe.StartInfo.UseShellExecute = $false
+    $atlasProbe.StartInfo.CreateNoWindow = $true
+    $atlasProbe.StartInfo.RedirectStandardError = $true
+    try {
+        [void]$atlasProbe.Start()
+        $atlasBanner = $atlasProbe.StandardError.ReadToEnd()
+        $atlasProbe.WaitForExit()
+        if ($atlasProbe.ExitCode -ne 0) { throw 'Java version probe failed.' }
+        return $atlasBanner
+    } finally { $atlasProbe.Dispose() }
+}
 $atlasRoot = Split-Path -Parent $PSScriptRoot
 $atlasToolRoot = Join-Path $atlasRoot '.tools\maestro'
 $atlasLaunchers = @(Get-ChildItem -LiteralPath $atlasToolRoot -Filter maestro.bat -Recurse -File -ErrorAction SilentlyContinue)
@@ -20,7 +37,7 @@ if (-not $AtlasJavaHome) {
         if (-not $atlasCandidate) { continue }
         $atlasJava = Join-Path $atlasCandidate 'bin\java.exe'
         if (Test-Path -LiteralPath $atlasJava) {
-            $atlasVersion = (& $atlasJava -version 2>&1 | Out-String)
+            $atlasVersion = Get-AtlasJavaVersion $atlasJava
             if ($atlasVersion -match 'version "(\d+)' -and [int]$Matches[1] -ge 17) {
                 $AtlasJavaHome = $atlasCandidate
                 break
@@ -31,7 +48,7 @@ if (-not $AtlasJavaHome) {
 if (-not $AtlasJavaHome) { throw 'Pass -AtlasJavaHome pointing to an installed JDK 17 or newer.' }
 $atlasJava = Join-Path $AtlasJavaHome 'bin\java.exe'
 if (-not (Test-Path -LiteralPath $atlasJava)) { throw 'The selected JDK has no bin\java.exe.' }
-$atlasVersion = (& $atlasJava -version 2>&1 | Out-String)
+$atlasVersion = Get-AtlasJavaVersion $atlasJava
 if ($atlasVersion -notmatch 'version "(\d+)' -or [int]$Matches[1] -lt 17) { throw 'Maestro requires Java 17 or newer.' }
 
 $atlasPreviousJavaHome = $env:JAVA_HOME

@@ -80,4 +80,4 @@ for (const file of ['AGENTS.md', 'docs/DESIGN_SYSTEM.md', 'docs/UI_ENVIRONMENT.m
 assert.match(read('AGENTS.md'), /## Current phase and authority/);
 assert.match(read('AGENTS.md'), /Never push on your own/);
 console.log('PASS setup documentation, phase policy and push-approval rule');
-console.log('NOT RUN React Native typecheck, lint, RNTL, Maestro device flows, native screenshots or assistive technology checks: no app foundation/device configured.');
+console.log('SCOPE static setup checks only. Run project typecheck, lint and component tests separately; this script does not verify native screenshots, device flows or assistive technologies.');

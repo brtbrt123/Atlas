@@ -93,3 +93,20 @@ User approved the recommended instruction-only Ponytail and two selected Superpo
 Only six Markdown files were activated, all compared successfully with upstream Git blobs. The optional shell helper and TypeScript example remain omitted from the active debugging skill; no plugin hooks, bootstrap, parallel-agent or branch-finishing workflows were installed or run. Their references to other skills do not authorize automatic dependency installation. ATLAS ownership, shared tracker, accessibility, zero-cost and Git approval rules remain authoritative.
 
 Verification: `node tools/verify-ui-setup.mjs` passes for all seven bundles (67 files) and three pointer targets. These are installation/integrity checks; skill selection/invocation in a fresh Claude Code session and the next Codex turn remain unobserved. Claude Code can invoke the three matching skill names in its next session. No commits, pushes, application changes or runtime UI tests performed. FND-03's separately reported PowerShell/Maestro failure remains unresolved by this focused installation task.
+
+## 2026-11-09 · Claude Code · FND-06 scaffold done; zero-cost plan
+
+- **Scaffold:** root `package.json` (Expo SDK 58, React Native 0.88.1, React 19.3, expo-router, expo-dev-client), `app.json`, strict `tsconfig.json` (`@/*` → `src/*`), minimal `app/_layout.tsx` and `app/index.tsx`. Your `src/` was not modified. `npx tsc --noEmit` passes with your drafts included (`.agents`, `.tools`, `scripts`, `tools` excluded). Expo's default template extras (`@expo/ui`, Reanimated, glass effect, React Compiler) were deliberately not added; ask via HANDOFFS if a UI task needs one.
+- **Unblocked:** DS-02 now depends only on DS-01; DS-01's compile check (TypeScript) can run now. Statuses are yours to change.
+- **Zero-cost (DEC-011):** Android = free local APK. iPhone = unresolved on Windows (free route needs a Mac). Paid prerequisites were removed from the docs I own. Open item for you: FND-03 Maestro wrapper still fails on PowerShell 5.1.
+- Nothing committed or pushed.
+
+## 2026-11-09 · Claude Code · Lint/test tooling in place (FND-07); action for Codex
+
+- **Added:** `eslint.config.js` (eslint-config-expo, ignores `.agents`, `.claude`, `.tools`, `scripts`, `tools`), `jest.config.js` (jest-expo, `@/` alias), `tests/unit/` smoke test, scripts `lint`, `test`, `typecheck`. RNTL is v14 (async `await render()`, uses `test-renderer`); tsconfig now has `"types": ["jest"]` (TypeScript 6 no longer auto-includes @types).
+- **Action for Codex:** `npm run lint` fails on your draft `src/features/workout/ActiveWorkoutScreen.tsx:13`: `useState(Date.now())` calls an impure function during render (react-hooks/purity). Please fix (e.g. lazy initializer `useState(() => Date.now())` or derive time outside render); I did not touch your file. Re-run `npm run lint` and tell me, then FND-07 can be marked Done. Rules were not relaxed.
+- `npx tsc --noEmit` and `npm test -- --runInBand` pass. Nothing committed.
+
+## 2026-11-09 · Claude Code · FND-07 Done; one-line edit to your file (user-approved)
+
+The user explicitly approved a one-line edit to Codex-owned `src/features/workout/ActiveWorkoutScreen.tsx:13`: `useState(Date.now())` → `useState(() => Date.now())` (react-hooks/purity; no behavior change). No other change to your files. `tsc`, `npm run lint` and `npm test -- --runInBand` (2 suites, 7 tests) now pass. The earlier request to fix this is withdrawn. Nothing committed.

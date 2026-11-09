@@ -7,6 +7,8 @@ Verified changes to ATLAS, newest first. Each entry names its author and the tas
 ### 2026-11-09
 
 #### Added
+- **FND-07** (Claude Code): ESLint (expo config), Jest (jest-expo) and RNTL 14 with scripts `lint`, `test`, `typecheck`; all three gates pass. Includes a user-approved one-line lint fix in Codex draft `ActiveWorkoutScreen.tsx` (lazy `useState` initializer, no behavior change).
+- **FND-06** (Claude Code): Expo SDK 58 app scaffolded in place (`package.json`, `app.json`, `tsconfig.json` strict with `@/` alias and typed routes, `app/_layout.tsx`, `app/index.tsx`, `expo-dev-client`). Verified: `expo install --check` clean, `tsc --noEmit` exit 0 (Codex drafts compile, untouched), `expo export --platform android` exit 0.
 - **FND-16** (Codex): pinned Markdown-only Ponytail, Superpowers systematic-debugging and verification-before-completion skills, with Claude Code pointers sharing the same files. Six new guidance files match upstream; setup verification passes for all seven skill bundles and three new pointers. No hooks, global settings, application visuals or interactions changed. Host discovery remains to be confirmed next session.
 - **FND-04** (Claude Code): milestone-based tracking.
   - `docs/FEATURE_TRACKER.md`: 10 milestones, 81 tasks.

@@ -9,12 +9,13 @@ Significant decisions for ATLAS, with their rationale. Both agents append entrie
 | DEC-001 | 2026-11-09 | Ordered milestones, no sprints | Process | Accepted | User |
 | DEC-002 | 2026-11-09 | The Markdown tracker is the single source of truth; progress = Done ÷ total | Process | Accepted | User (rules) / Claude Code (format) |
 | DEC-003 | 2026-11-09 | Agent ownership split, enforced by docs and a guard hook | Collaboration | Accepted | User (spec §2) |
-| DEC-004 | 2026-11-09 | Expo SDK 58 with development builds (not Expo Go) | Engineering | Proposed | Claude Code |
+| DEC-004 | 2026-11-09 | Expo SDK 58 with development builds (not Expo Go) | Engineering | Accepted (Android); iPhone see DEC-011 | Claude Code |
 | DEC-005 | 2026-11-09 | NativeWind 4.2 with Tailwind CSS 3.4, consuming Codex's tokens | Engineering | Proposed | Claude Code |
 | DEC-006 | 2026-11-09 | Data conventions: UUID keys, kg canonical, epoch-ms timestamps, history snapshots | Engineering | Proposed | Claude Code / User (spec §6) |
 | DEC-007 | 2026-11-09 | Claude Code skills point to Codex's pinned `.agents/skills` copies | Tooling | Accepted | Claude Code |
 | DEC-008 | 2026-11-09 | Global TypeScript pinned to major 6 for the language server | Tooling | Accepted | Claude Code |
 | DEC-009 | 2026-11-09 | Use the `gh` CLI; no GitHub MCP server | Tooling | Accepted | Claude Code |
+| DEC-011 | 2026-11-09 | Zero-cost development: Android local APK; iPhone route unresolved | Process | Accepted | User |
 | DEC-010 | 2026-11-09 | GitHub Projects board as an optional one-way mirror of the tracker | Process | Proposed | Claude Code |
 
 ---
@@ -97,3 +98,8 @@ Significant decisions for ATLAS, with their rationale. Both agents append entrie
   - Creating the project.
   - Then a tracker task to build and verify the sync.
 - **Consequences:** Without the sync, no board is created, so there's never a second, unsynchronized task system.
+
+### DEC-011 · Zero-cost development
+- **Context:** The user has an iPhone and an Android phone, no paid Apple membership, and won't spend money on ATLAS (Codex handoff 2026-11-09). Expo's docs say Expo Go on iPhone and `eas go` need an Apple Developer Program membership; the one free iPhone route is a local development build via Xcode, which needs a Mac. SDK 58 Expo Go availability on the App Store was not confirmed.
+- **Decision:** No paid services, cloud builds or memberships are prerequisites. Android: build APKs locally (free JDK 17 and Android Studio), via development builds (DEC-004). iPhone: unresolved on Windows; REL-04 is Blocked until a free route is found. No silent switch to a web app or downgrading dependencies.
+- **Consequences:** On-device verification (e.g. FND-15, WKT-10) targets Android only; iPhone validation needs a Mac or a free route the user finds.

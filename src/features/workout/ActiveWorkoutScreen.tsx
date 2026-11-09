@@ -10,7 +10,7 @@ export function isValidSet(set: SetDraft) {
     (set.rpe === '' || (decimal.test(set.rpe) && Number(set.rpe) >= 1 && Number(set.rpe) <= 10));
 }
 function useElapsed(startedAt: string) {
-  const [now, setNow] = useState(Date.now());
+  const [now, setNow] = useState(() => Date.now());
   useEffect(() => { const timer = setInterval(() => setNow(Date.now()), 1000); return () => clearInterval(timer); }, []);
   const minutes = Math.max(0, Math.floor((now - Date.parse(startedAt)) / 60000));
   return Number.isFinite(minutes) ? `${minutes} min` : '—';

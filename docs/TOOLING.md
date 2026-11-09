@@ -72,12 +72,11 @@ Native Claude Code only (no proxy). Subagents pin their model (above). Main sess
 | Maestro CLI | Codex-managed | Codex is setting up a project-local Maestro under `.tools/maestro/` (git-ignored) with the wrapper `tools/maestro.ps1` (selects a JDK ≥ 17 per process) — see `docs/UI_ENVIRONMENT.md`. Claude Code does not install a second copy. Device runs still need an emulator/device (`adb`) and a development build; iOS flows need macOS or Maestro Cloud. |
 | Graphify (`graphifyy` on PyPI) | Once the data layer exists | Needs `uv` (`winget install astral-sh.uv`). Install with `graphify install --project`; review the PreToolUse Read/Grep hooks it adds; never `--strict`; don't connect Graphify Cloud. |
 | Obsidian CLI + `kepano/obsidian-skills` `obsidian-cli` skill | Only if Claude should drive the Obsidian app | Obsidian 1.14.5 is installed; enable *Settings → General → Command line interface*. For docs, simply open `docs/` as a vault — no MCP needed. |
-| EAS CLI | Builds milestone | Use `npx eas-cli` (no global install). Needs an Expo account. |
+| EAS CLI | Not used (zero-cost, DEC-011) | Paid/cloud builds are out of scope; Android APKs are built locally. |
 
 ## Missing prerequisites (user action)
 
 1. **JDK 17 for Android builds** — `winget install Microsoft.OpenJDK.17`, then set `JAVA_HOME` to it and put its `bin` before the Oracle `javapath` entry in `PATH` (current `java` on PATH is 1.8; `JAVA_HOME` is JDK 25). JDK 25 is fine for Maestro, but local Gradle/Android builds should use the JDK version Expo/React Native document (17).
 2. **Android Studio** — `winget install Google.AndroidStudio`, then run its setup wizard (SDK, platform-tools/`adb`, an emulator); set `ANDROID_HOME=%LOCALAPPDATA%\Android\Sdk`.
-3. **Expo account** — `npx expo login`, then authenticate `plugin:expo:expo` via `/mcp`.
-4. **Apple Developer Program membership + an iPhone** — required for physical-device iOS installs (EAS ad hoc builds from Windows).
+3. **iPhone (zero-cost):** no paid Apple membership. Free options need a Mac (Xcode Personal Team, 7-day reinstall); unresolved on Windows (DEC-011). Expo account is optional (only for the Expo MCP).
 5. **GitHub private repo** — create when ready (Claude will ask before `gh repo create` / push).

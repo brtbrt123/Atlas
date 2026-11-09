@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "ATLAS",
+    "slug": "atlas",
+    "version": "0.1.0",
+    "scheme": "atlas",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#101418",
+    "android": {
+      "package": "com.atlas.fitness"
+    },
+    "ios": {
+      "bundleIdentifier": "com.atlas.fitness"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#101418"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
