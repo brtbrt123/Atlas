@@ -173,3 +173,19 @@ Fresh verification: `powershell.exe -NoProfile -Command '& .\tools\maestro.cmd -
 - **New for you:** every route now renders inside `DatabaseGate` (`src/navigation/DatabaseGate.tsx`), so no screen runs before migrations succeed. The loading and blocking-error views (`GateLoadingView`, `GateErrorView`) are Claude-owned functional placeholders with a stable props contract (see CONTRACTS.md "Database gate and layering"). You may take them over (move to `src/features` or `src/components` and request the swap here) to restyle them; keep the accessibility behavior: error text announced, loading indicator exposed as a progress bar, no Try again button when `retryable` is false.
 - **ESLint now enforces layering:** files in `src/features`, `src/components` and `src/theme` cannot import `src/database`, `src/services`, `expo-sqlite` or `drizzle-orm`. If lint reports `no-restricted-imports`, use an adapter hook instead (provided per feature).
 - Nothing else in your files changed. Verification: tsc, lint, `npm test -- --runInBand` (9 suites, 86 tests) and the Android export pass; not run on a device. Nothing committed.
+
+## 2026-11-09 · Claude Code · UI preview mounted (FND-14) and Android build prepared
+
+- **Preview:** `AtlasPreview` is mounted, unmodified, at `/dev/preview` (`app/dev/preview.tsx`). Its "UI preview · Example data · Not saved" banner is intact. Reach it from Home > "Open UI preview (dev only)" in development builds. In production the route redirects Home and the preview, fixtures and the draft screens are absent from the bundle (verified on the exported bundle).
+- **Note for your drafts:** they compile under strict TypeScript and lint cleanly (the earlier one-line `Date.now` fix is in). The first on-device look is pending the Android build (FND-15); this build runs on the user's Infinix X695 (arm64, Android 11, small/low-end class), a good target for your performance and 48-point-target checks.
+- **Not changed:** any file under `src/features`, `src/components`, `src/theme`. Nothing committed.
+
+## 2026-11-09 · Claude Code · App runs on the Infinix X695 (FND-15): UI observations for you
+
+- **First on-device run:** the app and your dev-only preview (`/dev/preview`, banner "UI preview · Example data · Not saved") render on the user's Infinix X695 (Android 11, arm64, 1080x2460). Build and run commands are in `docs/TOOLING.md`; the app needs the Metro server running (`npx expo start --dev-client`) with `adb reverse tcp:8081 tcp:8081`.
+- **Observed, yours to decide (no source of yours was changed):**
+  - Your preview uses React Native's `SafeAreaView`, which logs a deprecation warning at runtime ("use react-native-safe-area-context"); `react-native-safe-area-context` is already installed.
+  - The tab bar icons are default placeholder glyphs (boxes with an X); tab icons and tab/header styling are DS-06.
+  - In dev builds the Expo dev client's floating gear button overlaps the Home header's "Settings" link; this is dev-client chrome and disappears in release builds, but the header link may want more right padding.
+  - Preview typography and spacing look right at 1080x2460; large-text and 48-point-target checks on this device are still yours (DS-04, DS-08).
+- Screenshots from this run are in the session scratchpad only, not committed. Nothing committed.

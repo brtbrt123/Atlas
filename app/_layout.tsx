@@ -23,6 +23,7 @@ export default function RootLayout() {
         <Stack.Screen name="routine/[id]" options={{ title: 'Routine' }} />
         <Stack.Screen name="exercise/[id]" options={{ title: 'Exercise' }} />
         <Stack.Screen name="settings" options={{ title: 'Settings' }} />
+        <Stack.Screen name="dev/preview" options={{ title: 'UI preview (dev)' }} />
       </Stack>
     </DatabaseGate>
   );

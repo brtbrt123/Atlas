@@ -74,9 +74,27 @@ Native Claude Code only (no proxy). Subagents pin their model (above). Main sess
 | Obsidian CLI + `kepano/obsidian-skills` `obsidian-cli` skill | Only if Claude should drive the Obsidian app | Obsidian 1.14.5 is installed; enable *Settings → General → Command line interface*. For docs, simply open `docs/` as a vault — no MCP needed. |
 | EAS CLI | Not used (zero-cost, DEC-011) | Paid/cloud builds are out of scope; Android APKs are built locally. |
 
+## Android dev build (zero-cost, local) — verified 2026-11-09
+
+First successful build and install: Infinix X695 (arm64-v8a, Android 11), JDK 25 (no JDK 17 needed), Gradle 9.4.1, AGP 9.2.1, Kotlin 2.2.0, compileSdk 37, NDK 27.1.12297006, build-tools 37.0.0. The first build needed 13 attempts because of this machine's network and Windows limits; `scripts/android/build-android.sh` encodes all fixes (details: DEC-016).
+
+```bash
+adb devices -l                                   # note the serial
+bash scripts/android/build-android.sh <serial>   # build + install the debug dev client (arm64 only)
+npx expo start --dev-client                      # JS server; then: adb reverse tcp:8081 tcp:8081
+adb shell am start -a android.intent.action.VIEW -d "exp+atlas://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8081"
+```
+
+One-time setup the script expects (all free, all verified):
+- `C:\Users\Admin\gh` = short Gradle home (first run downloads about 4 GB of dependencies there).
+- `C:\Users\Admin\gh\cmake-3.31.6` = CMake 3.31.6 package from `https://dl.google.com/android/repository/cmake-3.31.6-windows.zip` (sha1 `1efbef168291afc5d6ae449b1a016f8bf034b0fc`, 20 MB), extracted there; its ninja 1.12.1 is long-path aware.
+- Android SDK at `%LOCALAPPDATA%\Android\Sdk` with platform android-37.0; Gradle installs build-tools 37.0.0, NDK and CMake 3.22.1 itself.
+
+Notes: Git Bash rewrites `/sdcard` paths; set `MSYS_NO_PATHCONV=1` for adb shell commands. `android/` is generated (`expo prebuild`), git-ignored and may be regenerated; `android/local.properties` is rewritten by the script. Metro and the dev client run only while the PC serves JS; a standalone release APK is a later task (REL-03).
+
 ## Missing prerequisites (user action)
 
-1. **JDK 17 for Android builds** — `winget install Microsoft.OpenJDK.17`, then set `JAVA_HOME` to it and put its `bin` before the Oracle `javapath` entry in `PATH` (current `java` on PATH is 1.8; `JAVA_HOME` is JDK 25). JDK 25 is fine for Maestro, but local Gradle/Android builds should use the JDK version Expo/React Native document (17).
-2. **Android Studio** — `winget install Google.AndroidStudio`, then run its setup wizard (SDK, platform-tools/`adb`, an emulator); set `ANDROID_HOME=%LOCALAPPDATA%\Android\Sdk`.
+1. **JDK:** JDK 25 works for the Android build (verified); no JDK 17 needed.
+2. **Android Studio / SDK:** installed and sufficient (verified by a successful build).
 3. **iPhone (zero-cost):** no paid Apple membership. Free options need a Mac (Xcode Personal Team, 7-day reinstall); unresolved on Windows (DEC-011). Expo account is optional (only for the Expo MCP).
 5. **GitHub private repo** — create when ready (Claude will ask before `gh repo create` / push).
