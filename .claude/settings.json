@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "EXPO_SKILLS_TELEMETRY": "0"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc --noEmit*)",
+      "Bash(npm run lint*)",
+      "Bash(npm test*)",
+      "Bash(npx jest*)",
+      "Bash(npx expo export*)",
+      "Bash(npx expo install --check*)",
+      "Bash(npx expo-doctor*)",
+      "Bash(npx drizzle-kit generate*)",
+      "Bash(npx drizzle-kit check*)",
+      "Bash(node tools/verify-ui-setup.mjs*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git branch --list*)",
+      "Bash(git worktree list*)",
+      "Bash(gh repo view*)",
+      "Bash(gh pr view*)",
+      "Bash(gh pr list*)",
+      "Bash(gh pr checks*)",
+      "Bash(gh run list*)",
+      "Bash(gh run view*)"
+    ],
+    "deny": [
+      "Bash(rm -rf*)",
+      "Bash(git reset --hard*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push*--force*)",
+      "Bash(git clean -f*)",
+      "Bash(git checkout -- .*)",
+      "Bash(npx drizzle-kit push*)",
+      "Bash(npx drizzle-kit drop*)",
+      "Bash(curl * | sh*)",
+      "Bash(curl * | bash*)",
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(**/*.keystore)",
+      "Read(**/*.jks)",
+      "Read(**/*.p8)",
+      "Read(**/*.p12)",
+      "Read(**/*.mobileprovision)",
+      "Read(**/credentials.json)",
+      "Read(**/google-services.json)"
+    ],
+    "ask": [
+      "Bash(git push*)",
+      "Bash(git commit*)",
+      "Bash(git merge*)",
+      "Bash(git rebase*)",
+      "Bash(git worktree add*)",
+      "Bash(git worktree remove*)",
+      "Bash(gh repo create*)",
+      "Bash(gh pr create*)",
+      "Bash(gh pr merge*)",
+      "Bash(gh release*)",
+      "Bash(eas *)",
+      "Bash(npx eas*)",
+      "Bash(npm install -g*)",
+      "Bash(npm i -g*)",
+      "Bash(winget *)",
+      "Bash(pip install*)",
+      "Bash(uv tool install*)",
+      "Bash(npx expo prebuild*)",
+      "Bash(npx drizzle-kit migrate*)",
+      "mcp__plugin_expo_expo"
+    ],
+    "disableBypassPermissionsMode": "disable"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.mjs\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/ownership-guard.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/lint-file.mjs\"",
+            "timeout": 45
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/stop-checks.mjs\"",
+            "timeout": 480
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/session-end.mjs\"",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": false,
+    "expo@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "frontend-design@synced": false
+  }
+}

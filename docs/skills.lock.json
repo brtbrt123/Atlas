@@ -1,0 +1,357 @@
+{
+  "schemaVersion": 1,
+  "auditedOn": "2026-11-09",
+  "scope": "project",
+  "skills": [
+    {
+      "name": "expo-native-ui",
+      "repository": "https://github.com/expo/skills",
+      "commit": "a9e5bd3fa00b4e61f632e43f85da73aee1942582",
+      "sourcePath": "plugins/expo/skills/expo-native-ui",
+      "installedPath": ".agents/skills/expo-native-ui",
+      "license": "MIT",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "a54ee681808bdeece32d9219ce74b5e4f86156d76cc6d00fb21ac2633f44c64f"
+        },
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "90bf5d66b1038913fea37bd6d57292eb6ecd0e0ee3b2bc3e283facc033f4b2b0"
+        },
+        {
+          "path": "references/controls.md",
+          "sha256": "6ec427731a65ffd66b745733665bb2c00992750c7d3710893d1bbf70b427d541"
+        },
+        {
+          "path": "references/gradients.md",
+          "sha256": "63ced0392f67c41bf90e726613d139a389db609799bfcb91124e6e69b9a66e70"
+        },
+        {
+          "path": "references/icons.md",
+          "sha256": "2c0622d8a3f61626a72fa7829d3044f3391cbd8ca91806f4752926cf4e66be59"
+        },
+        {
+          "path": "references/media.md",
+          "sha256": "c964182dfbcaa5eef00b947e0425f5a39ee2cfc1b2a4e251ba51fc823e87b0dc"
+        },
+        {
+          "path": "references/storage.md",
+          "sha256": "265e8bc21adcd698062f18fa442e0e07e99e67868576f18aac2112e5381ffbf1"
+        },
+        {
+          "path": "references/visual-effects.md",
+          "sha256": "dcdcaa5e0bf5c20341455e39d91312ca5f3034391908f77eb2e577044283adcc"
+        },
+        {
+          "path": "references/webgpu-three.md",
+          "sha256": "3a247a7740e4bab4aea5dec8b81c7782a5918bb221838a05f6a94c669f145679"
+        }
+      ]
+    },
+    {
+      "name": "expo-animation",
+      "repository": "https://github.com/expo/skills",
+      "commit": "a9e5bd3fa00b4e61f632e43f85da73aee1942582",
+      "sourcePath": "plugins/expo/skills/expo-animation",
+      "installedPath": ".agents/skills/expo-animation",
+      "license": "MIT",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "4ff5bdb7887ec1435c9cab0e8d1a7caee704d894d65c2a008ccc68b1cc2f260b"
+        },
+        {
+          "path": "RECIPES.md",
+          "sha256": "4db141cb346d49231c94a95aaa50844b85a71c47ec543e9f9f5a1f453abc9883"
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "7af0f5e9aa4ae6887fc7938cb9ec08f8cfa922a5154e15c355d1ac53e8d659fe"
+        },
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "7667e1a159300ee640ffb6ed4f81281dfdc0e3a789d4f3e5179c32ab3565795a"
+        }
+      ]
+    },
+    {
+      "name": "react-native-best-practices",
+      "repository": "https://github.com/callstackincubator/agent-skills",
+      "commit": "59e9d17446a248b21d86f078fcd0bd2d36db1ca4",
+      "sourcePath": "skills/react-native-best-practices",
+      "installedPath": ".agents/skills/react-native-best-practices",
+      "license": "MIT",
+      "files": [
+        {
+          "path": "POWER.md",
+          "sha256": "7e39898ec7b7e3335fbc8d290bd3b806020435fecfbc1c5e98ebfd31b2798999"
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "abdbb7fc34ad739420fe43632e0baa1d646a01d097c6905211aa8b5b41957bf1"
+        },
+        {
+          "path": "agents/openai.yaml",
+          "sha256": "13d867840f5d10f87256653bc71da8de508ad13b10fd6931e1eb29cdd8ceb9e6"
+        },
+        {
+          "path": "references/bundle-analyze-app.md",
+          "sha256": "2c43a39bdad593091b2ec6f3fb0307096feb854bf11f4187f31f237a50cf76ca"
+        },
+        {
+          "path": "references/bundle-analyze-js.md",
+          "sha256": "4e97a27c06ea91b49cacb18230f63bad392fc949e40d348787aab39755e8da41"
+        },
+        {
+          "path": "references/bundle-barrel-exports.md",
+          "sha256": "187ac5a80822d22dbccdf3bb07f0fa60905b494285e735b30d97e79961fdfca5"
+        },
+        {
+          "path": "references/bundle-code-splitting.md",
+          "sha256": "4cf3cae585f9ae7f64fc55af7af71d70e5ac3acb93fa6264a3186cc79d939cd7"
+        },
+        {
+          "path": "references/bundle-hermes-mmap.md",
+          "sha256": "5eca09ae487bce41436461cc7d8d96fa8861b39815a2b930263807591778b757"
+        },
+        {
+          "path": "references/bundle-library-size.md",
+          "sha256": "cb87a2d8a3cddd508b524b6b627ca775f5fc5a613f29d8a0f7e037ba054e4a7e"
+        },
+        {
+          "path": "references/bundle-native-assets.md",
+          "sha256": "766fb2d22a3cb8b5f26969fd4afc3caf1dd32fd8f2da6bf9233aac48c2bbfd42"
+        },
+        {
+          "path": "references/bundle-r8-android.md",
+          "sha256": "9f49269531e906e25f26eeb2a77b9af76bd562065d537c3cc0155301eb7bf9c0"
+        },
+        {
+          "path": "references/bundle-tree-shaking.md",
+          "sha256": "3033f006a07a430ca4e2381b456774e59b3ace4fe0aee38740291cd0f305e9ca"
+        },
+        {
+          "path": "references/images/bundle-treemap-source-map-explorer.png",
+          "sha256": "280495fc828cde33b0c1a83a02031d3ab484c0af240ab6fc408a313aa445fd3b"
+        },
+        {
+          "path": "references/images/controlled-textinput-pingpong.png",
+          "sha256": "883cc345490473110ce93536a39c224f692229f691da1203b084488569f48781"
+        },
+        {
+          "path": "references/images/devtools-flamegraph.png",
+          "sha256": "b257c6dbf4304aa6e2ca40ec357a13441cfa2f3cb84d5653af56484861a63c94"
+        },
+        {
+          "path": "references/images/emerge-xray-ios.png",
+          "sha256": "41d00a6e90e89bcc941daa41ad2bfc742e3817e421b4cd6e42fb7f43d304c3b2"
+        },
+        {
+          "path": "references/images/expo-atlas-treemap.png",
+          "sha256": "3e4ef5894d949f0e6a445329b33e3346dc8bded3855e18afe500584cd4c761a2"
+        },
+        {
+          "path": "references/images/flashlight-flatlist-vs-flashlist.png",
+          "sha256": "a9e57f2673669bed947e57c121ad85088e237f462362382008b3bb46570c72ca"
+        },
+        {
+          "path": "references/images/fps-drop-graph.png",
+          "sha256": "bb43718e87b140307e37d66dc2a5332e882881c4f8a14629b96072913b2ca580"
+        },
+        {
+          "path": "references/images/memory-heap-snapshot.png",
+          "sha256": "0cd36795ce16814717cad712b744ad4e523e1acef95263a3b49a8bb24ede8bad"
+        },
+        {
+          "path": "references/images/tti-warm-start-diagram.png",
+          "sha256": "6fc7cbf22a8ce657fe8d31978e7adfec24cd88a9a58c3d2a302f86fb64ff6a8e"
+        },
+        {
+          "path": "references/images/view-hierarchy-flattening.png",
+          "sha256": "9edaac44f464730d3f5b6c2c0ccd19d2edf24fa358b4470c6ebc4a37b61753d7"
+        },
+        {
+          "path": "references/images/xcode-instruments-templates.png",
+          "sha256": "5d864f068bb1dc5edf9586a557260aa0f27b2b6fc96e473d8d5a8b3c2c1e836b"
+        },
+        {
+          "path": "references/images/xcode-thread-view.png",
+          "sha256": "f3e7b75b87ce445e36293fcac070eecdb0609557fffb98a8cd000bcbe3e1b921"
+        },
+        {
+          "path": "references/js-animations-reanimated.md",
+          "sha256": "b0912deb98d8af8b8bf97d98789e39d467466be28cab9d96def7101b6e799b16"
+        },
+        {
+          "path": "references/js-atomic-state.md",
+          "sha256": "6005f5ba3e46c120d3c3fa38d1ea077bbc026c8c707dea0075025c84a4ff8254"
+        },
+        {
+          "path": "references/js-bottomsheet.md",
+          "sha256": "43eca23b45f2c100d506f51c21e56d72ae501147b5acec7b9fd1cbb92e2d08df"
+        },
+        {
+          "path": "references/js-concurrent-react.md",
+          "sha256": "0b2bab623b62136745e34ce135148f79311c3c4487068b0b0f2fa0b1fab851f2"
+        },
+        {
+          "path": "references/js-lists-flatlist-flashlist.md",
+          "sha256": "4d62b3a9d6325fc77cdc4fc18597d9e5d241e5afd37f9284babf0fc69ce0def7"
+        },
+        {
+          "path": "references/js-measure-fps.md",
+          "sha256": "5efca75bfbe57ebf1ec1e38df8704909e0df2e41df856715bb425d438cb48a34"
+        },
+        {
+          "path": "references/js-memory-leaks.md",
+          "sha256": "52d0f71f0addbd6b03e8a12e46fa7405a5ae68394f106081768e2625f1ffd838"
+        },
+        {
+          "path": "references/js-profile-react.md",
+          "sha256": "c7a283f68320de85d84940871e58c0c40b71182d704202d49a115ba98fdca716"
+        },
+        {
+          "path": "references/js-react-compiler.md",
+          "sha256": "70f873d84646260256e01b93f504468d645a4e57ad5f88eef5d090f63358aa1a"
+        },
+        {
+          "path": "references/js-uncontrolled-components.md",
+          "sha256": "4c27d770d1818edcb193612f141efe62f1ec907aa3aa8fbc54d15e677ffa54e7"
+        },
+        {
+          "path": "references/native-android-16kb-alignment.md",
+          "sha256": "d61c945db16abf89c03099138febb8be2f228187b94a534eab7c385290938806"
+        },
+        {
+          "path": "references/native-measure-tti.md",
+          "sha256": "f27bc1de4d443a9e49d372806aea91bf793bb4c7125e693db7cae3442eff57a1"
+        },
+        {
+          "path": "references/native-memory-leaks.md",
+          "sha256": "3b69f2545bcc541b81dde55c0e0d2803a87671dd7a64da848e041af43019b4f4"
+        },
+        {
+          "path": "references/native-memory-patterns.md",
+          "sha256": "cecf5b6eea44e3de9544976a9077b1b88d11bf5a336bf25cd27e094988ffb17d"
+        },
+        {
+          "path": "references/native-platform-setup.md",
+          "sha256": "767b2d7ee9889fb43eccaec15ef2601cc3e25706f85cef14f264ce052789572e"
+        },
+        {
+          "path": "references/native-profiling.md",
+          "sha256": "7830d1fd35fc52979b34d09646b8d237e895a3894d464ad16d6fd8bb32fe80c9"
+        },
+        {
+          "path": "references/native-sdks-over-polyfills.md",
+          "sha256": "ac9ca06c1f3a3646c4b75d2ca85039ed357cc117522d4d2de112dda5bd75cf2f"
+        },
+        {
+          "path": "references/native-threading-model.md",
+          "sha256": "7543ae88d708a382f0ec4d8fba987e7e89d8f2d2c954586a77a26c449e246b66"
+        },
+        {
+          "path": "references/native-turbo-modules.md",
+          "sha256": "39ca96ce0b787cbff25aa649508cb64ea8bbb1c07ddd08e10c1d6a6ac932ea41"
+        },
+        {
+          "path": "references/native-view-flattening.md",
+          "sha256": "483a25551f4d73199156599874d21d67731dbc4d1bc241ec672f064667265c24"
+        }
+      ]
+    },
+    {
+      "name": "react-native-testing",
+      "repository": "https://github.com/callstackincubator/agent-skills",
+      "commit": "59e9d17446a248b21d86f078fcd0bd2d36db1ca4",
+      "sourcePath": "plugins/vendored/.agents/skills/react-native-testing",
+      "installedPath": ".agents/skills/react-native-testing",
+      "license": "MIT",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "dea54d1d397cbd271a9ee7f6c09e841bb1aa546d9f2a3ee46fd466275061e6e1"
+        },
+        {
+          "path": "references/anti-patterns.md",
+          "sha256": "1ae7fcef36164093ca259a4192556b6356ba70ec2ac000b08307ffebd89da823"
+        },
+        {
+          "path": "references/api-reference-v13.md",
+          "sha256": "9099e39b3759de7daa2f6bfcfeb0bd0e19c655698e8e8482106bb5bd7f486e85"
+        },
+        {
+          "path": "references/api-reference-v14.md",
+          "sha256": "29c3da4628abcc432e42a691b99d02fc1cb2ac019a4deb88a6e6424f6a12e65a"
+        }
+      ]
+    },
+    {
+      "name": "ponytail",
+      "repository": "https://github.com/DietrichGebert/ponytail",
+      "commit": "96608e078b2d5ea607c5c3b8b5a54d1c1fba6846",
+      "sourcePath": "skills/ponytail",
+      "installedPath": ".agents/skills/ponytail",
+      "license": "MIT",
+      "mode": "markdown-only",
+      "omittedFiles": [],
+      "claudePointer": ".claude/skills/ponytail/SKILL.md",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "9badd22a32e19cb884e46dfa8d3aae82bb81dfa5484105b8b4f0262df823a509"
+        }
+      ]
+    },
+    {
+      "name": "systematic-debugging",
+      "repository": "https://github.com/obra/superpowers",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "sourcePath": "skills/systematic-debugging",
+      "installedPath": ".agents/skills/systematic-debugging",
+      "license": "MIT",
+      "mode": "markdown-only",
+      "omittedFiles": [
+        "condition-based-waiting-example.ts",
+        "find-polluter.sh"
+      ],
+      "claudePointer": ".claude/skills/systematic-debugging/SKILL.md",
+      "files": [
+        {
+          "path": "condition-based-waiting.md",
+          "sha256": "e89fec8400d6cd50f43407cec9fab50976ba4d55d0ec2eb51c0bd68036b54c26"
+        },
+        {
+          "path": "defense-in-depth.md",
+          "sha256": "1e175fb86fc357e58c6aebf5441e481e1b7868b4380c0456b63a17eefbd18ba7"
+        },
+        {
+          "path": "root-cause-tracing.md",
+          "sha256": "75b933b6a8c40bdb2031b10f21654395b56ec6ab6bc7b018c18d3fe57aeb7fb8"
+        },
+        {
+          "path": "SKILL.md",
+          "sha256": "51c6435d98c83c42c96ba7c35725a0b2c376cd487fb1a4e6bd0ddbe7e33ef202"
+        }
+      ]
+    },
+    {
+      "name": "verification-before-completion",
+      "repository": "https://github.com/obra/superpowers",
+      "commit": "22f0b463e7a5e579904dd6211a520321035526f7",
+      "sourcePath": "skills/verification-before-completion",
+      "installedPath": ".agents/skills/verification-before-completion",
+      "license": "MIT",
+      "mode": "markdown-only",
+      "omittedFiles": [],
+      "claudePointer": ".claude/skills/verification-before-completion/SKILL.md",
+      "files": [
+        {
+          "path": "SKILL.md",
+          "sha256": "2befe7fc55bcadaa3d97dd9e8efeb633d2561c0ebe74c5a8b17c4d9e7e4520b3"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+# Changelog
+
+Verified changes to ATLAS, newest first. Each entry names its author and the task ID whose evidence is recorded in `docs/FEATURE_TRACKER.md`. Drafts, mocks, and work whose checks fail are not listed until they pass. Both agents append here; Codex records visual and interaction changes.
+
+## Unreleased
+
+### 2026-11-09
+
+#### Added
+- **FND-16** (Codex): pinned Markdown-only Ponytail, Superpowers systematic-debugging and verification-before-completion skills, with Claude Code pointers sharing the same files. Six new guidance files match upstream; setup verification passes for all seven skill bundles and three new pointers. No hooks, global settings, application visuals or interactions changed. Host discovery remains to be confirmed next session.
+- **FND-04** (Claude Code): milestone-based tracking.
+  - `docs/FEATURE_TRACKER.md`: 10 milestones, 81 tasks.
+  - `docs/PROJECT_STATUS.md`: progress section generated from the tracker.
+  - `docs/CHANGELOG.md` and `docs/DECISIONS.md`.
+  - `scripts/tracker.mjs`: validates the tracker rules and computes progress (18 scripted tests passed).
+  - The Claude Code Stop hook now validates tracker edits.
+- **FND-02** (Claude Code): Claude Code harness.
+  - `CLAUDE.md`; rules for architecture, React Native, database, testing, collaboration and tracking.
+  - Four subagents.
+  - Five report-only hooks with an ownership guard.
+  - Permission rules.
+  - Plugins `expo` 1.13.9, `typescript-lsp` and `context7`; pointer skills to Codex's pinned Callstack skills.
+  - Global `typescript-language-server` 6.0.3 and `typescript` 6.0.3.
+  - Verification is recorded in `docs/TOOLING.md`.
+- **FND-01** (Shared): Git repository on `main` with LF normalization (`.gitattributes`) and combined ignore rules for native builds, secrets, Expo output, local tooling and session logs.
+- `docs/PRODUCT_SPEC.md`: the user's master specification, amended for milestone-based planning.
+
+#### Fixed
+- **FND-01**: restored Codex's original `.gitignore` entries (`.tools/`, `.ui-review/`) after Claude Code accidentally overwrote the file (see `docs/HANDOFFS.md`).

@@ -1,0 +1,60 @@
+# Local UI tooling and review output. Keep skills and their lock file versioned.
+# (Codex-owned entries — restored after an accidental overwrite on 2026-11-09)
+.tools/
+.ui-review/
+
+# Dependencies
+node_modules/
+
+# Expo / Metro
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+.metro-health-check*
+
+# Native projects are generated (Continuous Native Generation)
+/android
+/ios
+
+# Tests / coverage
+coverage/
+
+# Logs
+*.log
+npm-debug.*
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+google-services.json
+GoogleService-Info.plist
+credentials.json
+
+# Claude Code: personal settings and local session logs
+.claude/settings.local.json
+.claude/session-log/
+
+# Obsidian (docs/ is opened as a vault; keep shared config, ignore per-user state)
+docs/.obsidian/workspace*.json
+docs/.obsidian/cache
+.trash/
+
+# Graphify output (if/when enabled)
+graphify-out/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/*
+!.vscode/extensions.json
