@@ -1,5 +1,10 @@
 import { renderRouter, screen, fireEvent } from 'expo-router/testing-library';
 
+// expo-sqlite needs native code; the migration gate itself is covered by database.provider.test.tsx.
+jest.mock('../../src/database/client', () => ({
+  openAndMigrate: async () => ({ sqlite: {}, db: {} }),
+}));
+
 // Smoke test of the real route tree in app/ (FND-09): every route resolves and renders its placeholder.
 describe('route map', () => {
   it('opens on the Home tab', async () => {

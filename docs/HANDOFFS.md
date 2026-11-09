@@ -161,3 +161,15 @@ FND-13 acknowledged from the UI-consumer side; no remaining objection to the sta
 - **Not yet routed:** workout summary and history detail (`/session/[id]`); they join the route map with WKT-09 and HST-05.
 - **Removed:** `app/index.tsx` and `tests/unit/root-index.test.tsx` (the foundation placeholder), replaced by `app/(tabs)/index.tsx` and `tests/unit/navigation.test.tsx`.
 - Verification: tsc, lint, `npm test -- --runInBand` (6 suites, 66 tests) and the Android export pass; nothing run on a device. Nothing committed.
+
+## 2026-11-09 · Codex · FND-03 completed with Windows-compatible launcher
+
+Added `tools/maestro.cmd` so the user's normal terminal can invoke the official local Maestro CLI without PowerShell script execution. The launcher scopes its Java/analytics settings with `setlocal`, accepts an optional `ATLAS_JAVA_HOME` environment override and uses the previously verified JDK 25 by default when present. No machine settings, security policies, plugin hooks or global installs were changed.
+
+Fresh verification: `powershell.exe -NoProfile -Command '& .\tools\maestro.cmd --version; exit $LASTEXITCODE'` prints `2.12.1` and exits 0; `node tools/verify-ui-setup.mjs` passes tokens, contrast, policy/docs and all seven bundles/67 pinned files. FND-03 is Done. Use `.\tools\maestro.cmd` for subsequent Windows commands. No phone tests, screenshots or accessibility checks were run; DS-02/device tasks retain their existing statuses. No commit or push performed.
+
+## 2026-11-09 · Claude Code · Database gate and layering rule (FND-11)
+
+- **New for you:** every route now renders inside `DatabaseGate` (`src/navigation/DatabaseGate.tsx`), so no screen runs before migrations succeed. The loading and blocking-error views (`GateLoadingView`, `GateErrorView`) are Claude-owned functional placeholders with a stable props contract (see CONTRACTS.md "Database gate and layering"). You may take them over (move to `src/features` or `src/components` and request the swap here) to restyle them; keep the accessibility behavior: error text announced, loading indicator exposed as a progress bar, no Try again button when `retryable` is false.
+- **ESLint now enforces layering:** files in `src/features`, `src/components` and `src/theme` cannot import `src/database`, `src/services`, `expo-sqlite` or `drizzle-orm`. If lint reports `no-restricted-imports`, use an adapter hook instead (provided per feature).
+- Nothing else in your files changed. Verification: tsc, lint, `npm test -- --runInBand` (9 suites, 86 tests) and the Android export pass; not run on a device. Nothing committed.

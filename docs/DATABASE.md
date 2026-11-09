@@ -38,6 +38,17 @@ Owner: Claude Code. Source of truth: `src/database/schema.ts`; generated migrati
 
 FK-safe migrations (FKs off around `migrate()` + `foreign_key_check`), two-phase reorder, clamped finish time, live muscle attribution. See `docs/DECISIONS.md` DEC-013.
 
+## Startup and migrations (FND-11)
+
+- `app/_layout.tsx` wraps every route in `DatabaseGate` (`src/navigation/DatabaseGate.tsx`), which uses `DatabaseProvider` (`src/database/DatabaseProvider.tsx`, gate logic only): nothing renders until the database is open and migrated. A failed migration shows a blocking error screen ("ATLAS can't start", safe message, Try again; no retry button and an "update the app" message when the data came from a newer version). It never continues with a half-migrated schema.
+- `src/database/client.ts` opens `atlas.db` with expo-sqlite, calls `configureConnection` then `runMigrations`, and returns the drizzle instance. It is **single-flight** (`singleFlight.ts`): expo-sqlite shares one native connection per file, so every caller (effect re-runs, retries, fast refresh) shares one attempt. Only this file opens the database.
+- `configureConnection` sets and then **reads back** `journal_mode = WAL`, `foreign_keys = ON` and `busy_timeout = 5000`.
+- `src/database/migrate.ts` (`runMigrations`) follows DEC-013: foreign keys OFF (read back: if it is still ON because the connection is mid-transaction, it refuses with `MIGRATION`), `BEGIN IMMEDIATE`, apply all pending migrations in ONE transaction, `PRAGMA foreign_key_check` (any row = rollback), commit, foreign keys ON (always restored in `finally`, then read back). Applied migrations are tracked by journal tag in `__atlas_migrations` using bound parameters (DEC-015). A database containing a tag the app does not know (newer app) is rejected with `MIGRATION`.
+- `.sql` files are bundled as strings: `babel.config.js` (inline-import for `.sql`) and `metro.config.js` (`sourceExts` + sql). Because Babel caches, an edited `.sql` file needs `npx expo start --clear` to be re-inlined. Jest uses `tests/helpers/sql-transform.js`. Verified: the exported Android bundle contains the migration SQL.
+- `foreign_key_check` scans the whole database. A pre-existing orphan row (for example from a future import made with foreign keys off) would block every later migration, so imports must validate references (SET-04).
+- Layering: `useDb()` returns the drizzle instance for adapter hooks and service wiring only. ESLint (`no-restricted-imports`) forbids `src/features`, `src/components` and `src/theme` from importing `src/database`, `src/services`, `expo-sqlite` or `drizzle-orm`.
+- To change the schema: edit `schema.ts`, `npx drizzle-kit generate`, review the SQL, add a populated-data test if it rebuilds a table.
+
 ## Notes for service authors
 
 - `position` columns have unique indexes. Reordering must not collide mid-update: use a two-step shift (move to a temporary offset, then to final positions) inside one transaction.

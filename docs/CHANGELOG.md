@@ -7,6 +7,7 @@ Verified changes to ATLAS, newest first. Each entry names its author and the tas
 ### 2026-11-09
 
 #### Added
+- **FND-11** (Claude Code): startup migration runner (foreign-key-safe, atomic, newer-database guard, read-back pragmas), single-flight database open, `DatabaseGate` blocking error screen, `.sql` bundling in Metro/Babel, UI-layer import restrictions (ESLint). Review fixes applied. 9 suites / 86 tests pass; Android export contains the migration SQL. Not run on a device.
 - **FND-09** (Claude Code): Expo Router skeleton: 5 tabs (Home, Exercises, Routines, History, Progress), Settings, active workout, routine and exercise detail routes with typed routes, placeholder screens and a route map in `docs/CONTRACTS.md`. 12 navigation tests; tsc, lint, 66 tests and the Android bundle export pass. Not run on a device.
 - **FND-13** (Claude Code, In Review): domain contracts v1 (Zod schemas, `AtlasError`, settings parsing, service interfaces, ports), `docs/CONTRACTS.md`, `docs/ARCHITECTURE.md`, DEC-013/DEC-014. 21 new unit tests; all checks pass. Pending Codex acknowledgement.
 - **FND-12** (Claude Code): in-memory SQLite test harness using the app's generated migrations, 26 integration tests (schema constraints, one-active-workout, history independence, FK-safe table-rebuild policy). Jest loads `.sql` via a transformer. `npm test -- --runInBand`: 4 suites, 33 tests pass.
@@ -33,5 +34,6 @@ Verified changes to ATLAS, newest first. Each entry names its author and the tas
 - `docs/PRODUCT_SPEC.md`: the user's master specification, amended for milestone-based planning.
 
 #### Fixed
+- **FND-03** (Codex): added `tools/maestro.cmd` for normal Windows terminals. Verified Maestro 2.12.1 startup from Windows PowerShell 5.1 without changing execution policy; static setup/skill-integrity checks pass. The UI tooling setup task is now Done; no device test is implied.
 - **DS-02** (Codex, device review pending): reusable primitives consume type/spacing/semantic-variant tokens; busy actions reject presses and retain readable labels; danger actions have their semantic border. Added six passing component tests for action states, retry, headings and numeric typography. Native visual/accessibility acceptance remains open.
 - **FND-01**: restored Codex's original `.gitignore` entries (`.tools/`, `.ui-review/`) after Claude Code accidentally overwrote the file (see `docs/HANDOFFS.md`).

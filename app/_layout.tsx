@@ -1,13 +1,15 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 
+import { DatabaseGate } from '../src/navigation/DatabaseGate';
 import { colors } from '../src/theme/tokens';
 
-// Root layout (Claude-owned route config). Tabs are the main shell; the active workout, routine
+// Root layout (Claude-owned route config). DatabaseGate gates every route until the database
+// is open and migrated (FND-11). Tabs are the main shell; the active workout, routine
 // builder, exercise detail and settings are pushed over them.
 export default function RootLayout() {
   return (
-    <>
+    <DatabaseGate>
       <StatusBar style="light" />
       <Stack
         screenOptions={{
@@ -22,6 +24,6 @@ export default function RootLayout() {
         <Stack.Screen name="exercise/[id]" options={{ title: 'Exercise' }} />
         <Stack.Screen name="settings" options={{ title: 'Settings' }} />
       </Stack>
-    </>
+    </DatabaseGate>
   );
 }

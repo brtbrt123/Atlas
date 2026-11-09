@@ -18,6 +18,7 @@ Significant decisions for ATLAS, with their rationale. Both agents append entrie
 | DEC-011 | 2026-11-09 | Zero-cost development: Android local APK; iPhone route unresolved | Process | Accepted | User |
 | DEC-013 | 2026-11-09 | Database policies: FK-safe migrations, two-phase reorder, clock clamp, live muscle attribution | Engineering | Accepted | Claude Code (from architecture review) |
 | DEC-014 | 2026-11-09 | Domain contract conventions: RPE half steps, one rest range, safe errors, update schemas without defaults | Engineering | Accepted | Claude Code (from architecture review) |
+| DEC-015 | 2026-11-09 | Own migration runner and tracking table instead of drizzle's migrator | Engineering | Accepted | Claude Code |
 | DEC-010 | 2026-11-09 | GitHub Projects board as an optional one-way mirror of the tracker | Process | Proposed | Claude Code |
 | DEC-012 | 2026-11-09 | Use 48-unit minimum touch targets and semantic component recipes | UI/UX | Accepted | Codex |
 
@@ -127,3 +128,8 @@ Significant decisions for ATLAS, with their rationale. Both agents append entrie
 - **Update schemas never carry defaults:** a partial update contains exactly the keys sent (Zod 4 would otherwise refill defaults and wipe fields).
 - **Ids:** Zod 4 `z.uuid()` rejects non-RFC ids (including the nil UUID); seed rows use real v4 ids and identify built-ins by `builtinKey`.
 - **Read schemas vs stored rows:** domain schemas trim and limit text (names 1-100). Restore/import code must validate and normalize rows, not assume stored text already fits.
+
+### DEC-015 · Own migration runner and tracking table
+- **Context:** drizzle's `migrate()` runs all migrations in one transaction with foreign keys on, where a table-rebuild migration wipes history (reproduced in `tests/integration/migrations.rebuild.test.ts`; DEC-013).
+- **Decision:** `src/database/migrate.ts` applies drizzle-kit's generated SQL itself (foreign keys off, one transaction, `foreign_key_check`, commit, foreign keys on) and tracks applied migrations by journal **tag** in `__atlas_migrations`. drizzle-kit remains the generator; its journal and SQL files are the input. The drizzle tracking table is not used.
+- **Consequences:** migrations are keyed by tag, so tags must never be renamed or reused. A database from a newer app is refused. drizzle's built-in migrator must not be used on this database. The runner is single-flight (one shared expo-sqlite connection), reads back every safety pragma, uses `BEGIN IMMEDIATE`, and its whole-database `foreign_key_check` means imports must never create orphan rows.
