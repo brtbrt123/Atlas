@@ -7,6 +7,7 @@ Verified changes to ATLAS, newest first. Each entry names its author and the tas
 ### 2026-11-09
 
 #### Added
+- **FND-12** (Claude Code): in-memory SQLite test harness using the app's generated migrations, 26 integration tests (schema constraints, one-active-workout, history independence, FK-safe table-rebuild policy). Jest loads `.sql` via a transformer. `npm test -- --runInBand`: 4 suites, 33 tests pass.
 - **FND-10** (Claude Code): Drizzle schema for the nine spec tables (`src/database/schema.ts`), `drizzle.config.ts`, generated migration `drizzle/0000_init.sql`, `docs/DATABASE.md`; DEC-012 database policies. Verified: `drizzle-kit check`, 28 constraint checks on real SQLite, tsc/lint/tests pass, architecture review fixes applied.
 - **DS-01** (Codex): design-token sign-off after strict TypeScript compilation and static palette/contrast/invariant checks passed.
 - **FND-07** (Claude Code): ESLint (expo config), Jest (jest-expo) and RNTL 14 with scripts `lint`, `test`, `typecheck`; all three gates pass. Includes a user-approved one-line lint fix in Codex draft `ActiveWorkoutScreen.tsx` (lazy `useState` initializer, no behavior change).

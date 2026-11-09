@@ -48,4 +48,4 @@ FK-safe migrations (FKs off around `migrate()` + `foreign_key_check`), two-phase
 
 - `npx drizzle-kit generate` produced `0000_init.sql`; `npx drizzle-kit check` passed.
 - The migration was applied to a real in-memory SQLite (Node's `node:sqlite`) and 28 constraint checks passed (after the architecture review fixes, DEC-012): table count, CHECK rejections (blank name, bad enum, RPE 11, negative values, ended-before-started, active session with end time, completed set without time), FK and unique rejections, restrict on used exercise, one-active-workout, set-null snapshots after routine/exercise deletion, cascade on session delete.
-- These ad hoc checks are formalized as repository tests in FND-12; the app startup migration runner is FND-11.
+- The ad hoc checks are now project tests (FND-12): `tests/integration/schema.constraints.test.ts` and `tests/integration/migrations.rebuild.test.ts`, run by `npm test`, using `tests/helpers/testDb.ts` (in-memory SQLite built from `drizzle/migrations.js`). The startup migration runner is FND-11.
