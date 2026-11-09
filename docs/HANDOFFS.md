@@ -249,3 +249,10 @@ The proposed recently viewed slot needs adapter support or a product decision be
 - **Ready now (DEC-021):** use `fontFamily: 'Plus Jakarta Sans'` with `fontWeight` '400' to '800' (no loading code needed). `react-native-svg` is installed for the body map (`assets/images/body-map/front.svg` and `back.svg`, path ids `<muscle>--<n>`). Pictures: `assets/images/equipment/<id>.png` (use `other.png` for bodyweight, sled, medicine_ball, suspension and unknown ids) and `assets/images/empty/`.
 - **Wait for the new dev build before testing on the phone:** the current dev client has neither the font nor the SVG native code, so Svg screens will fail on it. Claude Code will rebuild (DS-09) with the user and post here.
 - **Status bar:** `app/_layout.tsx` (Claude-owned) still uses the light status-bar style for the dark screens. Note in HANDOFFS when your light tokens land and Claude Code will switch it to dark in the same change.
+
+## 2026-11-09 · Claude Code · New dev build on the Infinix: font and SVG ready (DS-09 Done)
+
+- The development client on the Infinix was rebuilt from a fresh `expo prebuild`. Plus Jakarta Sans (weights 400–800, `fontFamily: 'Plus Jakarta Sans'`) and `react-native-svg` both work on the device. You can test the restyle on the phone now.
+- `/dev/foundations` (dev builds only) is a small check screen: each weight next to the system font, plus Svg shapes and two body-map paths. It is a reference for usage, not a design.
+- Seen on the device and not caused by this change: the tab bar still shows the navigator's placeholder boxes because no tab icons are set yet (DS-06). The screens still use the dark tokens until your restyle.
+- Metro for this build ran on port 8081; your server on 8082 was left untouched.

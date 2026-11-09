@@ -90,7 +90,7 @@ One-time setup the script expects (all free, all verified):
 - `C:\Users\Admin\gh\cmake-3.31.6` = CMake 3.31.6 package from `https://dl.google.com/android/repository/cmake-3.31.6-windows.zip` (sha1 `1efbef168291afc5d6ae449b1a016f8bf034b0fc`, 20 MB), extracted there; its ninja 1.12.1 is long-path aware.
 - Android SDK at `%LOCALAPPDATA%\Android\Sdk` with platform android-37.0; Gradle installs build-tools 37.0.0, NDK and CMake 3.22.1 itself.
 
-Notes: Git Bash rewrites `/sdcard` paths; set `MSYS_NO_PATHCONV=1` for adb shell commands. `android/` is generated (`expo prebuild`), git-ignored and may be regenerated; `android/local.properties` is rewritten by the script. Metro and the dev client run only while the PC serves JS; a standalone release APK is a later task (REL-03).
+Notes: Git Bash rewrites `/sdcard` paths; set `MSYS_NO_PATHCONV=1` for adb shell commands. `android/` is generated (`expo prebuild`), git-ignored and may be regenerated; `android/local.properties` is rewritten by the script. After any native change (a config plugin or its options in `app.json`, or a package with native code such as `react-native-svg`), regenerate first with `CI=1 npx expo prebuild --platform android --clean --no-install`, then run the script; an older dev client cannot load the new native code. Metro and the dev client run only while the PC serves JS; a standalone release APK is a later task (REL-03).
 
 ## Missing prerequisites (user action)
 
