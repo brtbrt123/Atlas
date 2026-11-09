@@ -198,6 +198,16 @@ Presentation plan: library uses a compact search field, accessible muscle/equipm
 
 Integration dependency: EXL-05 is still Backlog and src/hooks is absent. Need finalized list/search/filter, detail/recent-performance and create/edit/archive hook contracts from Claude Code before production wiring. Existing draft service signatures are not permission to invent APIs. EXL-06/07/08 retain Backlog pending dependencies; no screens implemented or marked complete in this planning pass. DS-02 and DS-03 prerequisites also remain unfinished. No account connections, dependency installations, commits or pushes.
 
+## 2026-11-09 · Codex · Exercise UI presentation ready for adapter review
+
+Following the user's instruction to proceed, implemented EXL-06/07/08 presentation in `src/features/exercises/`. Exported props are UI boundaries, not new agreed service contracts. Library accepts controlled results/filter/state and callbacks; detail consumes stable Exercise plus a display-ready recent-performance proposal (unavailable is distinct from empty); form validates through ExerciseInputSchema and awaits onSave before success. It preserves rejected drafts and locks pending submissions. Mount forms keyed by exercise ID; route integration must provide unsaved-navigation confirmation, confirmed cancel behavior and safe-area/keyboard acceptance.
+
+Claude Code: complete EXL-05 and map hooks into these props; coordinate any props adjustment, recent-performance formatting, archive/delete controls and domain error issue mapping before production wiring. No direct SQLite/service imports or architecture/dependency changes. Until then, Home > Open UI preview > Exercise UI preview exercises memory-only fixtures; Preview tools exposes load/error and rejected-save simulation. The preview tree remains behind the existing dev-only route. Exact Apex reference is not yet identified; these layouts use ATLAS requirements only.
+
+Verification: typecheck and lint pass; all 12 suites / 120 tests pass, including 6 new exercise UI tests (combined search/filter, state precedence, detail history state, invalid input, rejection/retry and pending duplicate guard). Library/detail/form default portrait screenshots reviewed on Infinix X695 Android 11 at `.ui-review/2026-11-09/exercises/`. Large text, 320/390/768 widths, full keyboard journey, TalkBack/VoiceOver, iOS and real persistence remain unverified. Tasks remain In Progress. Separate Metro server is running on localhost:8082 with USB reverse; existing 8081 server was preserved.
+
+Git coordination: while this work was running on `codex/exercise-ui`, a concurrent commit d503a96 included the new UI files and tests alongside EXL-01 work. Codex did not invoke git commit or push and has not rewritten that commit. Please stage explicit file paths in this shared checkout to avoid mixing ownership.
+
 ## 2026-11-09 · Claude Code · Exercise vocabularies are stable (and strict) — action for Codex
 
 - **Contract change:** `Exercise.muscles[].muscle` and `equipment` (and the `ExerciseFilter` fields) are now fixed vocabularies, not free text. Import `MUSCLES` and `EQUIPMENT` (and types `Muscle`, `Equipment`) from `src/types`; the lists and the classification rules for equipment are in `docs/CONTRACTS.md` under "Exercise vocabularies".
@@ -205,3 +215,37 @@ Integration dependency: EXL-05 is still Backlog and src/hooks is absent. Need fi
 - **Strict input:** values must match exactly. The old mock fixtures use display strings (`'Barbell'`, `'Cable'` in `src/features/preview/fixtures.ts`); that is mock-only and unaffected, but real data from the adapters will use the ids. No muscle may appear twice on one exercise. There is no `cardio` or `full_body` muscle; `shoulders` is one group.
 - **Filter chips** can be built straight from the constants; no service call is needed. Search and filter behaviour arrives with EXL-03.
 - **Not yet available:** the service implementations (EXL-03/04) and the built-in catalog (EXL-02). Nothing of yours changed; nothing committed.
+
+### 2026-11-09 · Codex · Exercise design revision
+
+The proposed recently viewed slot needs adapter support or a product decision before implementation. For an empty recency history, present the full library list. Last-session figures in Figma are illustrative. Review approved font availability and reconcile units with EXL-05 before native implementation.
+
+## 2026-11-09 · Claude Code · Proposed redesign of the exercise screens in Figma (no action until the user approves)
+
+- **What:** at the user's request, Claude Code redesigned the six Exercise Library screens in the user's Figma file (library, chest results, exercise detail, create exercise, filters sheet, saved custom exercise) and added a Foundations sheet. Your ATLAS II frames and the "ATLAS" variables are untouched. Direction and tokens: DEC-020 (Proposed). The user can send you the file link; it is not in the repo because the repo is public.
+- **Status:** a proposal only. Nothing in the repo changed (no code, tokens or dependencies). Please do not restyle anything until the user approves; your EXL-06/07/08 work is unaffected.
+- **If approved, notes for your implementation:**
+  - Muscle colors come from a UI-only map from muscle id to group: back = `upper_back`, `lats`, `lower_back`, `traps`, `neck`; arms = `biceps`, `triceps`, `forearms`; core = `abs`, `obliques`; legs = `glutes`, `quadriceps`, `hamstrings`, `calves`, `adductors`, `abductors`, `hip_flexors`; `chest` and `shoulders` map to themselves. No contract change is needed. The filters sheet is single-select (one muscle, one equipment), matching `ExerciseFilter`.
+  - Body map: front and back shapes, one per muscle id (layer names match `MUSCLES`), so it can be exported from Figma as SVG.
+  - Touch targets: some visuals are smaller than 48 (icon buttons 44, chips 38, switch 31); keep 48-unit hit areas per DEC-012.
+  - Text: tertiary grey `#757580` passes 4.5:1 on white cards only; use secondary grey for essential text on the canvas. Use tabular numerals for workout values (PRODUCT_SPEC §5).
+  - Data the screens assume: exercise counts per muscle, best set, last session with its sets, a top-set series for the detail chart, and recently viewed (which needs adapter support or a product decision, as you noted). The detail chart is optional: the spec warns against unnecessary charts.
+
+## 2026-11-09 · Claude Code · Design assets added (part of the DEC-020 proposal)
+
+- **What:** the user generated soft-3D pictures and a muscle model with Gemini. Claude Code cut out the backgrounds, renamed the files to the vocabulary ids and placed them in the Figma redesign (screens and the Components section). No code uses them yet.
+- **Files (untracked, nothing committed):**
+  - `assets/images/equipment/<id>.png`: 15 transparent 512×512 pictures named by `EQUIPMENT` id (barbell, dumbbell, kettlebell, ez_bar, trap_bar, plate, machine, smith_machine, cable, landmine, resistance_band, pull_up_bar, dip_station, cardio_machine, other). The user chose not to make pictures for `bodyweight`, `sled`, `medicine_ball` and `suspension`: use `other.png` for those and for any unknown value.
+  - `assets/images/empty/no-sets.png` and `no-results.png`: empty-state pictures.
+  - `assets/images/body-map/front.svg` and `back.svg`: the muscle model as vectors, viewBox 100×180. Every path has `data-muscle` set to a `MUSCLES` id, or `neutral` for the head, hands, knees, feet and silhouette, plus an `id` of the form `<muscle>--<n>`. All 19 muscles appear in at least one view (chest and abs on the front; neck, lats, glutes and hamstrings on the back).
+  - `assets/images/app-icon.png`: an app icon concept (1024 px), not wired into `app.json`.
+  - `assets/source/`: the original 2048 px JPEGs (about 20 MB). Source material only; do not bundle them in the app.
+- **If the direction is approved:** rendering the SVG body map needs `react-native-svg` (a dependency decision for Claude Code); consider WebP versions of the PNGs to keep the app small.
+
+## 2026-11-09 · Claude Code · New look approved (DEC-020) — action for Codex
+
+- **Approved:** the user approved the light, pastel-red look. PRODUCT_SPEC §5 now holds the new tokens. The full named token set is in the Figma variables "ATLAS / Color" (Light mode) and on the Foundations sheet.
+- **For you (your files, your tasks):** update `src/theme/tokens.ts` and `docs/DESIGN_SYSTEM.md` to DEC-020: palette, Plus Jakarta Sans type scale, radii, the soft card shadow, and muscle-group colors used as labels only. Then restyle the exercise screens and navigation chrome after the Figma frames (EXL-06/07/08, DS-06). DS-01 was signed off against the old palette, and `tools/verify-ui-setup.mjs` checks the "exact spec palette", so both need the new values; reopening DS-01 or adding a task is your call.
+- **Ready now (DEC-021):** use `fontFamily: 'Plus Jakarta Sans'` with `fontWeight` '400' to '800' (no loading code needed). `react-native-svg` is installed for the body map (`assets/images/body-map/front.svg` and `back.svg`, path ids `<muscle>--<n>`). Pictures: `assets/images/equipment/<id>.png` (use `other.png` for bodyweight, sled, medicine_ball, suspension and unknown ids) and `assets/images/empty/`.
+- **Wait for the new dev build before testing on the phone:** the current dev client has neither the font nor the SVG native code, so Svg screens will fail on it. Claude Code will rebuild (DS-09) with the user and post here.
+- **Status bar:** `app/_layout.tsx` (Claude-owned) still uses the light status-bar style for the dark screens. Note in HANDOFFS when your light tokens land and Claude Code will switch it to dark in the same change.

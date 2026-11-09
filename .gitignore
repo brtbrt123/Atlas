@@ -51,6 +51,9 @@ docs/.obsidian/cache
 # Graphify output (if/when enabled)
 graphify-out/
 
+# Original AI-generated design images (about 20 MB, kept locally); app-ready copies live in assets/images/
+assets/source/
+
 # OS / editor
 .DS_Store
 Thumbs.db
