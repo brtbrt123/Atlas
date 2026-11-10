@@ -70,6 +70,10 @@ No external account was newly connected. No global Codex/MCP settings, system PA
 
 ## Maestro status
 
+**FND-03 completed on 9 November 2026.** Use `.\tools\maestro.cmd --version` from Command Prompt or Windows PowerShell. Verified in Windows PowerShell 5.1: prints `2.12.1`, exit 0. The batch launcher invokes the official local Maestro distribution directly, selects the previously verified JDK 25 (or an explicit `ATLAS_JAVA_HOME` override), and scopes environment changes with `setlocal`. It does not require running a PowerShell script and changes no security policy. Static setup verification also passes for all seven skill bundles and 67 pinned files. Device tests are outside this setup task.
+
+The earlier `.ps1` launcher remains available for shells that allow local PowerShell scripts. The previously recorded Windows PowerShell script-policy limitation is resolved for normal use by the `.cmd` entry point below; the policy itself is unchanged.
+
 Installed and CLI-verified from [Maestro cli-2.12.1](https://github.com/mobile-dev-inc/Maestro/releases/tag/cli-2.12.1), published 2 November 2026. The archive matched the published SHA-256 `54dbb0716425626604973cbb374c585ca30272375d9ce15177a1152765ddd9d7` before extraction under `.tools/maestro/`. This folder is ignored by Git. No remote shell installer was used.
 
 Run `.\tools\maestro.ps1 --version`; verified output: `2.12.1`. The wrapper accepts a named `-AtlasJavaHome` override, otherwise checks the existing JAVA_HOME then the observed JDK 25 location. It restores process environment variables afterward, requests analytics/update-notification opt-outs and changes no persisted system configuration. Maestro may create its own per-user local state. The sandbox's Java home mapped to `C:\`, causing the first CLI launch to fail on local state creation; the approved version check outside the sandbox succeeded with JDK 25.0.1. This proves CLI startup on that JDK, not Android build-tool compatibility or device automation. No test flows or cloud commands ran.
@@ -84,3 +88,7 @@ The current [Maestro installation documentation](https://docs.maestro.dev/maestr
 2. Claude Code provides the Expo foundation, dependency versions, navigation/state ownership, shared contracts and development build/device path.
 3. Optionally authorize Figma/Expo account connections and separately decide whether Impeccable or UI/UX Pro Max merits executable tooling; Taste is unnecessary for native scope.
 4. After integration, run the configured checks and the native matrix in `UI_REVIEW.md`; verify the new project skills appear in the next-turn selector.
+
+## Approved design skill installation · 9 November 2026
+
+Impeccable, UI/UX Pro Max and Taste (design-taste-frontend) are now installed in the project Codex skill root. This supersedes their earlier audit statuses. Exact source revisions, licenses and file hashes are in skills.lock.json. UI/UX Pro Max uses its upstream Codex template with a project-relative search path. Taste includes a substantial web reference library. Use native-relevant guidance for ATLAS.

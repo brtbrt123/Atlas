@@ -34,9 +34,32 @@ Owner: Claude Code. Source of truth: `src/database/schema.ts`; generated migrati
 - No orphan rows: foreign keys on, cascades only downward within a session or routine.
 - Analytics read only `is_completed = 1` sets of `completed` sessions (a service-level rule; analytics reach sets through `session_exercise_id`).
 
-## Policies (DEC-012)
+## Policies (DEC-013)
 
-FK-safe migrations (FKs off around `migrate()` + `foreign_key_check`), two-phase reorder, clamped finish time, live muscle attribution. See `docs/DECISIONS.md` DEC-012.
+FK-safe migrations (FKs off around `migrate()` + `foreign_key_check`), two-phase reorder, clamped finish time, live muscle attribution. See `docs/DECISIONS.md` DEC-013.
+
+## Startup and migrations (FND-11)
+
+- `app/_layout.tsx` wraps every route in `DatabaseGate` (`src/navigation/DatabaseGate.tsx`), which uses `DatabaseProvider` (`src/database/DatabaseProvider.tsx`, gate logic only): nothing renders until the database is open and migrated. A failed migration shows a blocking error screen ("ATLAS can't start", safe message, Try again; no retry button and an "update the app" message when the data came from a newer version). It never continues with a half-migrated schema.
+- `src/database/client.ts` opens `atlas.db` with expo-sqlite, calls `configureConnection` then `runMigrations`, and returns the drizzle instance. It is **single-flight** (`singleFlight.ts`): expo-sqlite shares one native connection per file, so every caller (effect re-runs, retries, fast refresh) shares one attempt. Only this file opens the database.
+- `configureConnection` sets and then **reads back** `journal_mode = WAL`, `foreign_keys = ON` and `busy_timeout = 5000`.
+- `src/database/migrate.ts` (`runMigrations`) follows DEC-013: foreign keys OFF (read back: if it is still ON because the connection is mid-transaction, it refuses with `MIGRATION`), `BEGIN IMMEDIATE`, apply all pending migrations in ONE transaction, `PRAGMA foreign_key_check` (any row = rollback), commit, foreign keys ON (always restored in `finally`, then read back). Applied migrations are tracked by journal tag in `__atlas_migrations` using bound parameters (DEC-015). A database containing a tag the app does not know (newer app) is rejected with `MIGRATION`.
+- `.sql` files are bundled as strings: `babel.config.js` (inline-import for `.sql`) and `metro.config.js` (`sourceExts` + sql). Because Babel caches, an edited `.sql` file needs `npx expo start --clear` to be re-inlined. Jest uses `tests/helpers/sql-transform.js`. Verified: the exported Android bundle contains the migration SQL.
+- `foreign_key_check` scans the whole database. A pre-existing orphan row (for example from a future import made with foreign keys off) would block every later migration, so imports must validate references (SET-04).
+- Layering: `useDb()` returns the drizzle instance for adapter hooks and service wiring only. ESLint (`no-restricted-imports`) forbids `src/features`, `src/components` and `src/theme` from importing `src/database`, `src/services`, `expo-sqlite` or `drizzle-orm`.
+- To change the schema: edit `schema.ts`, `npx drizzle-kit generate`, review the SQL, add a populated-data test if it rebuilds a table.
+
+## Repositories (EXL-01 onward)
+
+- Live in `src/database/repositories/`, built by factories such as `createExerciseRepository(db)` that take the drizzle instance (`AtlasDb`, `src/database/types.ts`). Pure persistence: no Zod, no clock, no id generation; services validate input, generate ids and timestamps and translate database errors into `AtlasError`.
+- The drizzle expo-sqlite driver is **synchronous**, so repositories use the sync API (`.all()`, `.get()`, `.run()`, sync `db.transaction`). Keep individual operations small (a bulk seed or import needs chunking or a background strategy decided in its own task).
+- Repositories take an `AtlasExecutor` (`BaseSQLiteDatabase<'sync', ...>`), so they accept the top-level database **or a transaction handle**. A service that writes through several repositories wraps them in one `db.transaction((tx) => { const a = createXRepository(tx); ... })`; a repository's own transaction inside it becomes a savepoint, so both layers stay atomic (tested).
+- Multi-row writes are single transactions (verified atomic by tests: a failing muscle link rolls back the exercise insert or update).
+- Patch rule for every repository: `undefined`/absent = unchanged, `null` = clear. No `this` in repositories (methods work when detached). Use `.limit(1)` with `.get()`.
+- Never pass an `async` callback to `db.transaction` (Drizzle commits as soon as the callback returns its promise), and do not use the expo-sqlite async API on the drizzle connection after startup (DEC-018).
+- Tests run the **real drizzle expo driver** in Node: `tests/helpers/drizzleDb.ts` fakes the three expo-sqlite methods the driver calls over `node:sqlite`, on a database built from the shipped migrations.
+- Error translation (services, EXL-04): match only the SQLite message text (`UNIQUE constraint failed: <table>.<col>`, `FOREIGN KEY constraint failed`, `CHECK constraint failed: <name>`); expo-sqlite throws plain errors like "Error code 19: UNIQUE constraint failed: ..." with no `errcode` property, and the test fake reproduces that shape.
+- `ExerciseRepository`: `create`, `findById`, `findByBuiltinKey`, `list({ includeArchived })`, `update(id, patch, now)` (only the keys sent; `muscles` replaces all links; an empty patch changes nothing), `setArchived(id, archived, now)`. Hard delete and search/filter arrive with EXL-04 and EXL-03.
 
 ## Notes for service authors
 
@@ -47,5 +70,5 @@ FK-safe migrations (FKs off around `migrate()` + `foreign_key_check`), two-phase
 ## Verification (2026-11-09)
 
 - `npx drizzle-kit generate` produced `0000_init.sql`; `npx drizzle-kit check` passed.
-- The migration was applied to a real in-memory SQLite (Node's `node:sqlite`) and 28 constraint checks passed (after the architecture review fixes, DEC-012): table count, CHECK rejections (blank name, bad enum, RPE 11, negative values, ended-before-started, active session with end time, completed set without time), FK and unique rejections, restrict on used exercise, one-active-workout, set-null snapshots after routine/exercise deletion, cascade on session delete.
-- These ad hoc checks are formalized as repository tests in FND-12; the app startup migration runner is FND-11.
+- The migration was applied to a real in-memory SQLite (Node's `node:sqlite`) and 28 constraint checks passed (after the architecture review fixes, DEC-013): table count, CHECK rejections (blank name, bad enum, RPE 11, negative values, ended-before-started, active session with end time, completed set without time), FK and unique rejections, restrict on used exercise, one-active-workout, set-null snapshots after routine/exercise deletion, cascade on session delete.
+- The ad hoc checks are now project tests (FND-12): `tests/integration/schema.constraints.test.ts` and `tests/integration/migrations.rebuild.test.ts`, run by `npm test`, using `tests/helpers/testDb.ts` (in-memory SQLite built from `drizzle/migrations.js`). The startup migration runner is FND-11.

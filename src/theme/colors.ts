@@ -1,11 +1,9 @@
-/** ATLAS brand palette. Border is decorative, not an accessible input boundary. */
+/** Approved light palette, DEC-020. */
 export const colors = {
-  background: '#101418',
-  surface: '#1E252B',
-  elevated: '#293239',
-  accent: '#B7F36B',
-  text: '#F5F7F8',
-  muted: '#A6B0B7',
-  border: '#344047',
-  danger: '#EF7777',
+  background: '#F6F6F8', surface: '#FFFFFF', elevated: '#F1F1F5',
+  accent: '#FF6961', text: '#1D1D24', muted: '#6B6B77',
+  border: '#D9D9E1', danger: '#C2332C', accentText: '#C2332C',
+  onAccent: '#45141A', accentSoft: '#FFE8E6',
 } as const;
+export const muscleColors = { chest: '#FFA987', back: '#86C5FF', shoulders: '#FFD06B', arms: '#F5A0D2', core: '#B4A6FF', legs: '#79D9BF' } as const;
+export const cardShadow = '0px 4px 16px rgba(29, 29, 36, 0.06)';

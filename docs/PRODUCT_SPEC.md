@@ -95,7 +95,7 @@ Workout duration should use stored timestamps rather than relying on a continuou
 
 The specification included an illustrative UI concept (an "ACTIVE SESSION" card for "Upper Body A — Incline Bench Press" with weight/reps/status fields and a "Complete Set" action). It is illustrative only, not recorded workout data. Codex maintains the design system in `docs/DESIGN_SYSTEM.md`.
 
-**Design tokens:** Background `#101418`, surface `#1E252B`, elevated `#293239`, accent `#B7F36B`, primary text `#F5F7F8`, muted text `#A6B0B7`, border `#344047`, danger `#EF7777`.
+**Design tokens (DEC-020, approved 2026-11-09):** a clean, light, flat look. Canvas `#F6F6F8`, surface `#FFFFFF`, raised `#F1F1F5`, primary text `#1D1D24`, secondary text `#6B6B77`, border `#D9D9E1`, danger `#D92D3A`. One accent, pastel red `#FF6961`, with dark text `#45141A` on it; red text and icons use `#C2332C`. Muscle-group colors (labels only): chest `#FFA987`, back `#86C5FF`, shoulders `#FFD06B`, arms `#F4A3D3`, core `#B4A6FF`, legs `#79D9BF`. Font: Plus Jakarta Sans. Light is the default theme; a dark mode with the same accent is defined in the design variables.
 
 Use a 4-point spacing scale, minimum 44-point touch targets, accessible contrast, tabular numerals for workout values, and native-feeling navigation. Support reduced motion and dynamic text sizes.
 

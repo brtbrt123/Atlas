@@ -1,0 +1,63 @@
+// ATLAS Android build helper (see docs/TOOLING.md "Android dev build"). Copied to $GRADLE_USER_HOME/init.d by build-android.sh. repo.maven.apache.org (Cloudflare) answers Gradle with
+// HTTP 403 on this network, and plugins.gradle.org redirects library requests to it. Google's official
+// Maven Central mirror is therefore put FIRST in every repository list; it answers 404 for artifacts it
+// does not have (plugin markers, Google/Android artifacts), so Gradle falls through to the normal repos.
+// Applies only when GRADLE_USER_HOME points at the short Gradle home (C:/Users/Admin/gh); no global Gradle config is touched.
+def mirror = 'https://maven-central.storage-download.googleapis.com/maven2'
+def rewrite = { repos ->
+  repos.all { r ->
+    if (r instanceof MavenArtifactRepository && r.url.host == 'repo.maven.apache.org') {
+      r.url = mirror
+    }
+  }
+}
+beforeSettings { s ->
+  s.buildscript.repositories { maven { url mirror } }
+  // Declaring any plugin repository disables Gradle's default portal, so re-add it after the mirror.
+  s.pluginManagement.repositories {
+    maven { url mirror }
+    gradlePluginPortal()
+    google()
+  }
+  rewrite(s.pluginManagement.repositories)
+}
+settingsEvaluated { s ->
+  rewrite(s.pluginManagement.repositories)
+  rewrite(s.dependencyResolutionManagement.repositories)
+}
+gradle.beforeProject { p ->
+  p.buildscript.repositories { maven { url mirror } }
+  p.repositories { maven { url mirror } }
+}
+allprojects {
+  rewrite(buildscript.repositories)
+  rewrite(repositories)
+}
+
+// Windows MAX_PATH: ninja 1.10 (bundled with CMake 3.22.1) cannot create object folders beyond ~248
+// characters, and CMake mirrors each full source path inside the build folder. Relocating the C++ build
+// folder to a short root keeps every path under the limit. Applies only with this GRADLE_USER_HOME.
+gradle.beforeProject { p ->
+  def shorten = {
+    def android = p.extensions.findByName('android')
+    if (android != null) {
+      try {
+        android.externalNativeBuild.cmake.buildStagingDirectory = new File("C:/Users/Admin/gb/${p.name}")
+      } catch (Throwable ignored) { }
+      try {
+        // CMake hashes object paths longer than this (relative to the build folder), keeping the absolute path < 260.
+        android.defaultConfig.externalNativeBuild.cmake.arguments('-DCMAKE_OBJECT_PATH_MAX=128')
+      } catch (Throwable ignored) { }
+    }
+  }
+  // Newer CMake bundles a long-path-aware ninja (the 3.22.1 one fails beyond 260 chars). Runs after the
+  // module's own script, before AGP reads the version.
+  p.afterEvaluate {
+    def android = p.extensions.findByName('android')
+    if (android != null) {
+      try { android.externalNativeBuild.cmake.version = '3.31.6' } catch (Throwable ignored) { }
+    }
+  }
+  p.pluginManager.withPlugin('com.android.library') { shorten() }
+  p.pluginManager.withPlugin('com.android.application') { shorten() }
+}

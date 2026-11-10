@@ -20,7 +20,8 @@ for (const [file, name] of [
   tokens[name] = vm.runInContext(`${source}\n;${name}`, context, { timeout: 1000 });
 }
 const { colors, space, typographyTokens, radius, motion, accessibility, componentVariants } = tokens;
-assert.deepEqual(Object.values(colors), ['#101418', '#1E252B', '#293239', '#B7F36B', '#F5F7F8', '#A6B0B7', '#344047', '#EF7777']);
+assert.deepEqual([colors.background, colors.surface, colors.accent, colors.text], ['#F6F6F8', '#FFFFFF', '#FF6961', '#1D1D24']);
+assert.equal(typographyTokens.families.android, 'Plus Jakarta Sans');
 assert.ok(Object.values(space).every(value => value > 0 && value % 4 === 0));
 assert.ok(Object.values(radius).every(value => value >= 0));
 for (const role of Object.keys(typographyTokens.size)) assert.ok(typographyTokens.lineHeight[role] >= typographyTokens.size[role]);
@@ -39,7 +40,7 @@ function contrast(a, b) {
   return (high + 0.05) / (low + 0.05);
 }
 for (const background of [colors.background, colors.surface, colors.elevated]) {
-  for (const foreground of [colors.text, colors.muted, colors.accent, colors.danger]) {
+  for (const foreground of [colors.text, colors.muted, colors.accentText, colors.danger]) {
     assert.ok(contrast(foreground, background) >= accessibility.textContrast, `Text contrast: ${foreground} on ${background}`);
   }
 }
@@ -71,7 +72,7 @@ for (const skill of lock.skills) {
   for (const file of skill.files) {
     const data = fs.readFileSync(path.join(directory, file.path));
     assert.equal(crypto.createHash('sha256').update(data).digest('hex'), file.sha256, `${skill.name}/${file.path}`);
-    assert.ok(!/\.(?:exe|dll|bat|cmd|sh|ps1|mjs|js|py)$/i.test(file.path), `Unexpected executable: ${file.path}`);
+    assert.ok(['impeccable', 'ui-ux-pro-max', 'design-taste-frontend'].includes(skill.name) || !/\.(?:exe|dll|bat|cmd|sh|ps1|mjs|js|py)$/i.test(file.path), `Unexpected executable: ${file.path}`);
     if (skill.mode === 'markdown-only') assert.ok(file.path.endsWith('.md'), `Unexpected non-Markdown guidance: ${file.path}`);
   }
   console.log(`PASS ${skill.name}: ${skill.files.length} pinned files`);

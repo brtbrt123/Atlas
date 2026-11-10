@@ -19,3 +19,28 @@ Use TalkBack and VoiceOver manually: heading/field order, field names and units,
 Do not invent app IDs, test routes or fake passing flows. Once Claude Code supplies an installable build and stable selectors, add smoke flows for start/resume, set entry, save failure/retry and finish confirmation. Then add termination/relaunch recovery with the engine owner. Run against an explicit device and record the Maestro version. Screenshots and flows require an installed app and Android SDK/device connection or macOS iOS simulator tooling.
 
 Maestro release acquisition and local CLI verification are tracked in `UI_ENVIRONMENT.md`; a working CLI does not mean a device test passed. Native iOS simulator testing requires a macOS host. Android and physical iOS verification must be scheduled before calling screens finished.
+
+## 2026-11-09 · Android exploratory review (Codex)
+
+Reviewed the installed development app and mock Home/Active Workout preview on Infinix X695, Android 11, 1080x2460, density 480 (360 logical units wide), font scale 1.0. Local screenshots: `.ui-review/2026-11-09/` and temporary `atlas-phone-review/` captures. This is partial review, not acceptance or production persistence testing.
+
+Observed issues:
+- Main Home remains a route placeholder; tab icons render as missing-glyph boxes.
+- Persistent development controls consume substantial height before preview content. Keep the mock-data disclosure, but reduce the control footprint.
+- Home's primary Start workout action is below the initial viewport.
+- Active Workout repeats labels and tall set blocks, requiring substantial scrolling for set entry and completion.
+- Opening a numeric field displayed the keyboard while the focused input remained below the visible content. Capture: `10-keyboard.png` in the temporary review folder. Keyboard focus/scroll handling needs investigation before acceptance.
+
+Numeric keyboard appearance was exercised; no values or personal phone settings were changed. Save failure/retry and persistence were not verified. Large text, TalkBack, landscape, reduced motion and iOS remain untested. DS-02 remains In Review; the full DS-08 review is incomplete. No application source changes, commits or pushes were made.
+
+## 2026-11-09 · EXL-06/07/08 presentation review
+
+Native default portrait screenshots of the new mock Exercise Library, detail and create form reviewed on Infinix X695 / Android 11 / 360 logical width / font scale 1.0. Evidence: `.ui-review/2026-11-09/exercises/`. Text wraps without truncating exercise names; primary/secondary muscles and equipment are explicitly labeled; create/save actions have scalable 48-unit minimum targets. Development tools collapse to one disclosure. The Expo floating gear overlaps some preview content and is development chrome. Large gaps in detail and filter choice density warrant further large-text/size review before acceptance. Native form keyboard testing was inconclusive; do not treat the extra temporary keyboard capture as a passing keyboard check. No final native accessibility or persistence claim.
+
+## DEC-020 native preview review
+
+Reviewed light library, filter sheet, chest results, exercise detail, custom form and a memory-only saved exercise on Infinix X695 / Android 11 / 1080x2460 / density 480 / default font scale. Screenshots in .ui-review/2026-11-09/light-exercises. Verified the embedded font, equipment images, SVG muscle paths, combined filter interaction and temporary custom save. Fixed equipment label wrapping after inspection. Some initial captures predate the final tile adjustment. Full Figma matching remains incomplete: recent-card values, exact detail chart/session composition, form picker styling, preview header chrome and full native navigation need another pass. Tab icons and status bar integration await Claude's route change. iOS, large text and assistive technologies remain unverified.
+
+## Figma layout correction after user feedback
+
+The first DEC-020 implementation reused the old presentation structure too heavily. Rebuilt the library header/search row, circular create action, recent-card figures, horizontal muscle chips, compact equipment tiles, segmented tracking, selectable muscle card, detail section order, chart grid/markers, session set chips and final setup note. Latest native comparisons are in .ui-review/2026-11-09/figma-fidelity. Checked library/detail at default Infinix scale. Development route header/banner and missing navigation integration still alter the overall composition relative to Figma. 122 tests, strict typecheck and lint passed during this correction.

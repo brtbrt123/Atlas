@@ -53,5 +53,6 @@ SessionStart context · ownership guard (PreToolUse) · per-file ESLint (PostToo
 - Persist each completed set immediately; multi-record writes use transactions; historical sessions never change when routines/exercises change.
 - No Supabase, cloud sync, analytics SDKs or network calls in app code (offline-first, private).
 - Do not commit, push, create repos/PRs or run EAS builds without the user's explicit request.
+- The GitHub repository is **public** (DEC-017): never commit secrets, credentials, signing keys, `.env` files, session logs or personal data, and prefer not to add device serials or local user paths to new docs.
 - Prefer official docs for current APIs (Expo plugin skills, Expo MCP `read_documentation`, Context7). Verify versions against the installed Expo SDK, not old examples.
 - Tooling inventory and sources: `docs/TOOLING.md`.

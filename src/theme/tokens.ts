@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import { typographyTokens } from './typography';
 
-export { colors } from './colors';
+export { colors, muscleColors, cardShadow } from './colors';
 export { space, layout } from './spacing';
 export { radius } from './radii';
 export { motion } from './motion';
