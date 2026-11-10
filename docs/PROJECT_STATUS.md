@@ -13,7 +13,7 @@ _Generated 2026-11-09 from `docs/FEATURE_TRACKER.md`. Progress = Done tasks ÷ a
 | Milestone | Done | Total | Progress | Ready | In Progress | In Review | Blocked | Backlog |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | M1 · Project Foundation | 15 | 16 | 93.8% | 1 | 0 | 0 | 0 | 0 |
-| M2 · Design System | 2 | 9 | 22.2% | 1 | 0 | 1 | 0 | 5 |
+| M2 · Design System | 2 | 9 | 22.2% | 0 | 1 | 1 | 0 | 5 |
 | M3 · Exercise Library | 1 | 9 | 11.1% | 3 | 3 | 0 | 0 | 2 |
 | M4 · Routine Management | 0 | 7 | 0.0% | 1 | 0 | 0 | 0 | 6 |
 | M5 · Active Workout Tracking | 0 | 10 | 0.0% | 0 | 0 | 0 | 0 | 10 |
@@ -22,7 +22,7 @@ _Generated 2026-11-09 from `docs/FEATURE_TRACKER.md`. Progress = Done tasks ÷ a
 | M8 · Settings and Data Management | 0 | 6 | 0.0% | 1 | 0 | 0 | 0 | 5 |
 | M9 · Testing and Optimization | 0 | 6 | 0.0% | 0 | 0 | 0 | 0 | 6 |
 | M10 · Private Android and iOS Distribution | 0 | 7 | 0.0% | 2 | 0 | 0 | 1 | 4 |
-| **All** | **18** | **84** | **21.4%** | **10** | **3** | **1** | **1** | **51** |
+| **All** | **18** | **84** | **21.4%** | **9** | **4** | **1** | **1** | **51** |
 
 ### Blocked
 
@@ -31,6 +31,7 @@ _Generated 2026-11-09 from `docs/FEATURE_TRACKER.md`. Progress = Done tasks ÷ a
 ### In progress / in review
 
 - **DS-02** (Codex, In Review) Core primitives: Type, Button, Card, Screen, Section, Feedback with variants, disabled/busy states and accessibility roles
+- **DS-06** (Codex, In Progress) Navigation chrome styled with tokens: tab bar and headers on native stack/tabs
 - **EXL-06** (Codex, In Progress) Exercise Library screen: search, filters, loading/empty/error/content states
 - **EXL-07** (Codex, In Progress) Exercise detail screen
 - **EXL-08** (Codex, In Progress) Custom exercise form
@@ -38,7 +39,6 @@ _Generated 2026-11-09 from `docs/FEATURE_TRACKER.md`. Progress = Done tasks ÷ a
 ### Ready to start
 
 - **FND-08** (Claude Code) NativeWind 4.2 + Tailwind 3.4 consuming `src/theme` tokens without duplicating values
-- **DS-06** (Codex) Navigation chrome styled with tokens: tab bar and headers on native stack/tabs
 - **EXL-02** (Claude Code) Built-in exercise catalog: original seed data (name, equipment, primary/secondary muscles, tracking type) seeded idempotently
 - **EXL-03** (Claude Code) Exercise search and filter service: name, muscle, equipment; case-insensitive
 - **EXL-04** (Claude Code) Custom exercises: create, edit, archive with Zod validation; history stays intact

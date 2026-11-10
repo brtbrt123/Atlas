@@ -15,8 +15,8 @@ test('preview combines search and equipment filters and opens a result', async (
   expect(screen.getByText('No matches')).toBeOnTheScreen();
   await userEvent.press(screen.getByRole('button', { name: 'Clear filters' }));
   await userEvent.press(screen.getByRole('button', { name: 'Incline dumbbell press, Dumbbell' }));
-  expect(screen.getByRole('header', { name: 'Muscles' })).toBeOnTheScreen();
-  expect(screen.getByText('History not connected')).toBeOnTheScreen();
+  expect(screen.getByRole('header', { name: 'Muscles worked' })).toBeOnTheScreen();
+  expect(screen.getByText('Last 8 sessions')).toBeOnTheScreen();
 });
 
 test.each(['loading', 'error'] as const)('library does not show stale rows or empty feedback while %s', async state => {

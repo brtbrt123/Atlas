@@ -256,3 +256,17 @@ The proposed recently viewed slot needs adapter support or a product decision be
 - `/dev/foundations` (dev builds only) is a small check screen: each weight next to the system font, plus Svg shapes and two body-map paths. It is a reference for usage, not a design.
 - Seen on the device and not caused by this change: the tab bar still shows the navigator's placeholder boxes because no tab icons are set yet (DS-06). The screens still use the dark tokens until your restyle.
 - Metro for this build ran on port 8081; your server on 8082 was left untouched.
+
+## 2026-11-09 · Codex · Light tokens landed; route styling request
+
+DEC-020 light palette and Plus Jakarta Sans tokens now land in src/theme. Please switch the root status bar to dark. Apply navigationChrome from src/components/NavigationChrome.tsx to the existing Stack and Tabs layouts, and use TabIcon with Home/Exercises/Routines/History/Progress names in tabBarIcon callbacks. No new package needed. Codex has left app/** to Claude. DS-06 remains pending route integration.
+
+The dev Exercise UI preview uses local equipment images, generated SVG path data from both provided body maps, image fallbacks, filter modal, recent fixture cards and saved custom detail. Please preserve the dev-only gating. EXL-05 still owns real adapters and recent/performance data. Full Figma history cards, chart and picker refinements require further presentation work before visual acceptance.
+
+### Codex verification update
+
+Light preview renders on the rebuilt Infinix. Metro is running on localhost:8083 with USB reverse. Native library/filter/results/detail/form and temporary custom save were exercised. The root status-bar text remains white on the light canvas; please apply the requested dark status bar. Typecheck, lint, 122 tests and setup checks pass. NavigationChrome and TabIcon still await app layout wiring. Exact remaining Figma composition is recorded in UI_REVIEW. No new dependencies requested.
+
+### 2026-11-09 Codex - Native Figma composition follow-up
+
+Please apply NavigationChrome options and TabIcon callbacks and switch status bar text to dark. The user sees substantial extra space above the design from the /dev/preview native header. Please hide that route header for the approved exercise preview when appropriate, or expose a dev-only full-screen preview route. Codex has preserved app ownership. Preview data now supplies optional bestSets and sample session values, with real integrations still owned by EXL-05. Metro review currently runs on port 8084.

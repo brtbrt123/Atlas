@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { AccessibilityInfo, ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import type { TextProps, ViewProps } from 'react-native';
-import { colors, componentVariants, layout, radius, space, typography } from '../theme/tokens';
+import { colors, cardShadow, componentVariants, layout, radius, space, typography } from '../theme/tokens';
 
 export function Type({ tone = 'primary', variant = 'body', numeric = false, style, ...props }: TextProps & {
   tone?: 'primary' | 'muted' | 'accent' | 'danger';
   variant?: 'body' | 'caption' | 'title' | 'heading' | 'display';
   numeric?: boolean;
 }) {
-  return <Text {...props} style={[styles.text, { color: tone === 'primary' ? colors.text : colors[tone], fontSize: typography.size[variant], lineHeight: typography.lineHeight[variant] }, variant !== 'body' && variant !== 'caption' && styles.bold, numeric && styles.numeric, style]} />;
+  return <Text {...props} style={[styles.text, { color: tone === 'primary' ? colors.text : colors[tone === 'accent' ? 'accentText' : tone], fontSize: typography.size[variant], lineHeight: typography.lineHeight[variant] }, variant !== 'body' && variant !== 'caption' && styles.bold, numeric && styles.numeric, style]} />;
 }
 export function Button({ label, onPress, variant = 'primary', disabled = false, busy = false, accessibilityHint }: {
   label: string; onPress: () => void; variant?: keyof typeof componentVariants.button; disabled?: boolean; busy?: boolean; accessibilityHint?: string;
@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
   bold: { fontWeight: typography.weight.bold }, numeric: { fontVariant: ['tabular-nums'] },
   button: { minHeight: layout.minTouch, minWidth: layout.minTouch, borderRadius: radius.input, borderWidth: 1, paddingHorizontal: space.lg, paddingVertical: space.md, flexDirection: 'row', gap: space.sm, alignItems: 'center', justifyContent: 'center' },
   disabled: { opacity: componentVariants.state.disabledOpacity }, pressed: { opacity: componentVariants.state.pressedOpacity },
-  card: { borderRadius: radius.card, padding: layout.gutter, gap: space.lg, borderWidth: 1 },
+  card: { borderRadius: radius.card, padding: layout.gutter, gap: space.lg, borderWidth: 0, boxShadow: cardShadow },
   screen: { flex: 1, backgroundColor: colors.background },
   content: { paddingHorizontal: layout.gutter, paddingTop: space.xl, paddingBottom: space.xxl + space.sm, flexGrow: 1 },
   column: { width: '100%', maxWidth: layout.maxWidth, alignSelf: 'center', gap: space.xxl },

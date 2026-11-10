@@ -1,1 +1,1 @@
-export const radius = { input: 8, card: 16, pill: 999 } as const;
+export const radius = { input: 16, card: 24, pill: 999 } as const;
