@@ -7,6 +7,7 @@ import { schema } from './schema';
 import type { AtlasDb } from './types';
 import { configureConnection, runMigrations, type MigrationBundle, type SqlDatabase } from './migrate';
 import { singleFlight } from './singleFlight';
+import { seedExercises } from './seedExercises';
 
 export const DATABASE_NAME = 'atlas.db';
 
@@ -32,9 +33,11 @@ export const openAndMigrate: OpenAndMigrate = singleFlight(async () => {
   try {
     await configureConnection(sqlite as SqlDatabase);
     await runMigrations(sqlite as SqlDatabase, bundle as unknown as MigrationBundle);
+    const db = createDrizzle(sqlite);
+    seedExercises(db);
+    return { sqlite, db };
   } catch (error) {
     await sqlite.closeAsync().catch(() => undefined);
     throw error;
   }
-  return { sqlite, db: createDrizzle(sqlite) };
 });

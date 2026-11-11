@@ -72,3 +72,7 @@ FK-safe migrations (FKs off around `migrate()` + `foreign_key_check`), two-phase
 - `npx drizzle-kit generate` produced `0000_init.sql`; `npx drizzle-kit check` passed.
 - The migration was applied to a real in-memory SQLite (Node's `node:sqlite`) and 28 constraint checks passed (after the architecture review fixes, DEC-013): table count, CHECK rejections (blank name, bad enum, RPE 11, negative values, ended-before-started, active session with end time, completed set without time), FK and unique rejections, restrict on used exercise, one-active-workout, set-null snapshots after routine/exercise deletion, cascade on session delete.
 - The ad hoc checks are now project tests (FND-12): `tests/integration/schema.constraints.test.ts` and `tests/integration/migrations.rebuild.test.ts`, run by `npm test`, using `tests/helpers/testDb.ts` (in-memory SQLite built from `drizzle/migrations.js`). The startup migration runner is FND-11.
+
+## Built-in catalog (EXL-02)
+
+After migrations, startup calls seedExercises before exposing the database to screens. The 65-entry original catalog uses stable builtinKey values and fixed v4 ids. Each attempt validates catalog identities, then inserts missing entries and their muscle links in one synchronous transaction. Existing keys are skipped wholesale, preserving user edits, archive flags and references. Failed attempts roll back and can retry. Future catalog releases retain old keys and ids and append new entries. No schema or seed-version table is needed.

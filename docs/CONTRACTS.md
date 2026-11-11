@@ -5,7 +5,7 @@ Owner: Claude Code. Consumers: Codex's screens, through adapter hooks in `src/ho
 Sources of truth (code):
 - Domain schemas and types: `src/types/domain.ts`, `src/types/settings.ts`, `src/types/enums.ts`, `src/types/errors.ts` (import everything from `src/types`).
 - Service interfaces: `src/services/contracts.ts`; injectable ports: `src/services/ports.ts`.
-- Status: **v1 draft.** The types are tested (`tests/unit/types.*.test.ts`). The service interfaces have **no implementations yet**; each feature finalizes its section (EXL-05, RTN-04, WKT-06, HST-04, SET-01) and records the change in `HANDOFFS.md`. Do not build against a method that its feature task has not marked done.
+- Status: **v1 draft.** The types are tested (`tests/unit/types.*.test.ts`). **ExerciseService is implemented (EXL-03/04)**; adapter hooks are pending in EXL-05; each feature finalizes its section (EXL-05, RTN-04, WKT-06, HST-04, SET-01) and records the change in `HANDOFFS.md`. Do not build against a method that its feature task has not marked done.
 
 ## Conventions
 
@@ -92,7 +92,7 @@ Values are only ever added, never renamed or removed (stored text). The database
 |---|---|
 | Home data: weekly activity, most recent workout, resume (`HomeModel`) | HST-03 / HST-04 |
 | Previous performance per exercise (active workout "previous" column) and exercise recent history (detail screen) | WKT-06 / EXL-05 |
-| Filter chips are built from the exported `MUSCLES` and `EQUIPMENT` constants (no service call needed); search and filtering behaviour arrives with EXL-03 | EXL-03 |
+| Exercise search/filter service is implemented; adapter wiring remains pending | EXL-05 |
 | Progress analytics (strength, volume, frequency, records) | ANL-05 |
 | Data export / import envelope, version and error codes | SET-03 / SET-04 |
 | Notifier port (`src/services/ports.ts`) is defined; the expo-notifications implementation arrives with WKT-05 | WKT-05 |
@@ -151,3 +151,29 @@ Notes: the tab layout (`app/(tabs)/_layout.tsx`) uses token colors only; tab/hea
 1. Change the schema/interface in `src/types` or `src/services/contracts.ts`; update this file.
 2. Add or update tests; run `npx tsc --noEmit`, `npm run lint`, `npm test -- --runInBand`.
 3. Append a dated entry to `docs/HANDOFFS.md` describing what Codex can now consume or must change.
+
+
+## Exercise search service (EXL-03, implemented 2026-11-11)
+
+createExerciseSearchService(repository) in src/services/exerciseSearchService.ts implements the list portion of ExerciseService using the existing ExerciseRepository.list. createExerciseService composes this search with the EXL-04 methods; EXL-05 supplies application adapters.
+
+list(filter?) resolves to an Exercise array in repository name/id order. Omitted, empty or whitespace-only query matches every non-archived exercise. Name search trims the query, normalizes query and name to Unicode NFC, lowercases both and performs a literal substring match. Percent, underscore and quotes have no wildcard meaning. This is case-insensitive matching with Unicode lowercase rules, without accent folding or locale-specific collation.
+
+Muscle matches either a primary or secondary association. Equipment uses the exact equipment id. All supplied predicates combine. includeArchived defaults false; true includes archived records alongside current records while retaining the other predicates. No matches resolves to an empty array.
+
+Validate through ExerciseFilterSchema. Invalid filters reject with VALIDATION and details.issues before any repository read. Repository failure rejects with a safe PERSISTENCE message, retaining the original failure only in Error.cause. Screens continue to consume adapter hooks; the development preview remains isolated until EXL-05.
+
+
+## Exercise writes (EXL-04, implemented 2026-11-11)
+
+createExerciseService(db, { clock, ids }) implements the existing complete ExerciseService interface and delegates list to EXL-03. Clock and UUID v4 generation remain injected ports. Invalid dependency output rejects as INTERNAL. No runtime ID package or composition root is introduced by this task; EXL-05 supplies those runtime dependencies.
+
+Create validates ExerciseInputSchema, fills defaults, trims text and generates metadata. Every created exercise is custom with builtinKey null. Caller-supplied system fields are ignored. The returned promise resolves after the full exercise/muscle write transaction commits.
+
+Get returns archived or current exercises. Update validates ExerciseUpdateSchema and replaces only supplied fields. Undefined means unchanged; null clears a nullable field; an empty muscle array clears muscle associations. An empty patch preserves updatedAt. Neither update nor archive changes historical session snapshots or sets. Muscle attribution for historical analytics remains live under DEC-013; adapters should explain this before muscle edits.
+
+Archive/unarchive retain identities, muscle links and references. Repeating the same archive state is a no-op that preserves updatedAt. Get/update/archive/unarchive/remove reject malformed ids as VALIDATION and absent rows as NOT_FOUND.
+
+Remove hard-deletes an unreferenced custom exercise and its muscle links. Inside the same transaction it checks routine references first (EXERCISE_IN_USE), then any session reference, active or completed (HAS_HISTORY). Built-in removal rejects as VALIDATION with an archive suggestion, preserving the seed key so catalog startup cannot recreate a deleted built-in.
+
+Schema errors include details.issues. Database failures reject with a safe PERSISTENCE message and retain low-level information only in Error.cause. Writes and their result reads share an outer synchronous transaction, preserving atomicity if a nested muscle write or result read fails. Native integrated verification remains EXL-09.

@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 
 import { DatabaseGate } from '../src/navigation/DatabaseGate';
 import { colors } from '../src/theme/tokens';
+import { navigationChrome } from '../src/components/NavigationChrome';
 
 // Root layout (Claude-owned route config). DatabaseGate gates every route until the database
 // is open and migrated (FND-11). Tabs are the main shell; the active workout, routine
@@ -10,11 +11,10 @@ import { colors } from '../src/theme/tokens';
 export default function RootLayout() {
   return (
     <DatabaseGate>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <Stack
         screenOptions={{
-          headerStyle: { backgroundColor: colors.surface },
-          headerTintColor: colors.text,
+          ...navigationChrome,
           contentStyle: { backgroundColor: colors.background },
         }}
       >
@@ -23,7 +23,7 @@ export default function RootLayout() {
         <Stack.Screen name="routine/[id]" options={{ title: 'Routine' }} />
         <Stack.Screen name="exercise/[id]" options={{ title: 'Exercise' }} />
         <Stack.Screen name="settings" options={{ title: 'Settings' }} />
-        <Stack.Screen name="dev/preview" options={{ title: 'UI preview (dev)' }} />
+        <Stack.Screen name="dev/preview" options={{ headerShown: false }} />
         <Stack.Screen name="dev/foundations" options={{ title: 'Font & SVG check (dev)' }} />
       </Stack>
     </DatabaseGate>

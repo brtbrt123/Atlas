@@ -5,7 +5,7 @@
 import { asc, eq, inArray, sql } from 'drizzle-orm';
 
 import type { Equipment, Exercise, ExerciseMuscle, MuscleRole, TrackingType } from '../../types';
-import { exerciseMuscles, exercises } from '../schema';
+import { exerciseMuscles, exercises, routineExercises, sessionExercises } from '../schema';
 import type { AtlasExecutor } from '../types';
 
 export interface NewExercise {
@@ -158,7 +158,16 @@ export function createExerciseRepository(db: AtlasExecutor) {
   const setArchived = (id: string, archived: boolean, now: number): boolean =>
     db.update(exercises).set({ isArchived: archived, updatedAt: now }).where(eq(exercises.id, id)).run().changes > 0;
 
-  return { create, findById, findByBuiltinKey, list, update, setArchived };
+  const references = (id: string) => ({
+    inRoutine: Boolean(db.select({ id: routineExercises.id }).from(routineExercises).where(eq(routineExercises.exerciseId, id)).limit(1).get()),
+    inSession: Boolean(db.select({ id: sessionExercises.id }).from(sessionExercises).where(eq(sessionExercises.exerciseId, id)).limit(1).get()),
+  });
+
+  /** Caller checks references in its transaction before deleting. Muscle links cascade. */
+  const remove = (id: string): boolean =>
+    db.delete(exercises).where(eq(exercises.id, id)).run().changes > 0;
+
+  return { create, findById, findByBuiltinKey, list, update, setArchived, references, remove };
 }
 
 export type ExerciseRepository = ReturnType<typeof createExerciseRepository>;
