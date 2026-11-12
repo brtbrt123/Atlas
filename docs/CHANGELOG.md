@@ -4,6 +4,16 @@ Verified changes to ATLAS, newest first. Each entry names its author and the tas
 
 ## Unreleased
 
+### 2026-11-11
+
+- **EXL-04** (Codex temporary takeover, Done): implemented complete exercise service with injected ids/clock, schema-validated creation and edits, archive/restore, protected custom deletion and preserved workout snapshots. Built-in removal directs users to archive. Twenty-five new integration checks and all 165 tests pass, with typecheck/lint also passing.
+
+- **EXL-03** (Codex temporary takeover, Done): added validated exercise name search and combined muscle/equipment filters, secondary-muscle matching, archived exclusion and safe read failures. Thirteen new integration checks pass; typecheck, lint and all 140 tests pass.
+
+- **EXL-02** (Codex temporary engineering takeover, In Review): added 65 original built-in exercise definitions and insert-only startup seeding after migrations. Catalog upgrades preserve existing names, muscle links, notes and archive choices. Five new real-SQLite integration tests pass, along with typecheck, lint and all 127 tests. Native seed timing awaits a connected phone.
+
+- **DS-06** (Codex, In Review): wired tab icons and shared header styling, switched status-bar text to dark and removed the redundant dev preview header with safe-area handling. Typecheck, lint and all 122 tests pass. Native verification awaits a connected phone.
+
 ### 2026-11-09
 
 #### Added

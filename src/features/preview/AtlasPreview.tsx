@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Type } from '../../components/ui';
 import { colors } from '../../theme/tokens';
 import { HomeScreen } from '../home/HomeScreen';
@@ -27,7 +28,7 @@ export function AtlasPreview() {
     onNotesChange: notes => setModel(current => ({ ...current, notes })),
     onFinish: async () => { if (failSave) throw new Error('Preview finish failure'); },
   };
-  if (exercisePreview) return <View style={s.fill}><ExercisePreview onExit={() => setExercisePreview(false)} /></View>;
+  if (exercisePreview) return <SafeAreaView style={s.fill}><ExercisePreview onExit={() => setExercisePreview(false)} /></SafeAreaView>;
   return <SafeAreaView style={s.fill}>
     <View style={s.tools}><Type variant="caption" tone="accent">UI preview · Example data · Not saved</Type>
       <Button variant="secondary" label="Exercise UI preview" onPress={() => setExercisePreview(true)} />

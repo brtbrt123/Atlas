@@ -1,4 +1,5 @@
 import React from 'react';
+import type { ColorValue } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { colors, typography } from '../theme/tokens';
 
@@ -9,8 +10,8 @@ const paths = {
   History: 'M12 3C0 3 0 21 12 21C24 21 24 3 12 3M12 7V12L16 15',
   Progress: 'M3 19L10 11L14 15L22 5M16 5H22V11',
 };
-export function TabIcon({ name, color }: { name: keyof typeof paths; color: string }) {
-  return <Svg width={24} height={24} viewBox="0 0 24 24"><Path d={paths[name]} fill="none" stroke={color} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" /></Svg>;
+export function TabIcon({ name, color }: { name: keyof typeof paths; color: ColorValue | null }) {
+  return <Svg width={24} height={24} viewBox="0 0 24 24"><Path d={paths[name]} fill="none" stroke={color ?? colors.muted} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" /></Svg>;
 }
 export const navigationChrome = {
   headerStyle: { backgroundColor: colors.background },

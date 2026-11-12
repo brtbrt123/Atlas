@@ -181,3 +181,17 @@ Use condensed type for display and performance figures in the second Figma propo
 - **Context:** DEC-020 needs the Plus Jakarta Sans font and an SVG body map. ATLAS runs as a development build (not Expo Go), so native changes are possible, and everything must work offline.
 - **Decision:** add `expo-font` (~58.0.11), `@expo-google-fonts/plus-jakarta-sans` (^0.4.2, OFL font) and `react-native-svg` (15.16.0) with `npx expo install`. Embed the five weights (400–800) at build time with the `expo-font` config plugin instead of loading them at runtime: Android gets one XML font family named "Plus Jakarta Sans"; iOS lists the files in `UIAppFonts` and takes the family name from the files. Screens use `fontFamily: 'Plus Jakarta Sans'` with `fontWeight`; the root layout has no font-loading state. The native background, splash and `userInterfaceStyle` switch to light.
 - **Consequences:** the font and `react-native-svg` work only after a new development build (prebuild and Gradle, DEC-016); the current dev client shows system fonts and cannot render Svg, so Svg screens must not be tested on it. iOS stays unverified until an iPhone build exists (DEC-011). Jest is unaffected. The status bar style in `app/_layout.tsx` stays light until Codex's light tokens land, then flips to dark in the same change. The font license ships inside the package; keep it with the files if they are ever copied.
+
+### DEC-022 - Catalog identities and startup insertion (Codex, 2026-11-11)
+
+EXL-02 implements DEC-018 with an original 65-entry starter catalog. Fixed, checked v4 ids avoid adding a random-id runtime dependency for deterministic built-in content. builtinKey remains the duplicate-detection identity. Validate before writes, then insert missing definitions in one transaction after migrations and before screen startup. Read existing keys on each startup to accommodate future additions. Preserve existing rows even if the packaged definition changes. Native timing remains pending until the Infinix reconnects.
+
+### EXL-03 search semantics - 2026-11-11 - Codex
+
+Use literal substring name search after query trim and Unicode NFC/lowercase normalization. Match both primary and secondary muscles and combine every supplied filter. Preserve repository ordering. The initial catalog is small enough to filter the existing repository result in the service, avoiding wildcard interpretation and a new database collation dependency. The ExerciseService interface is unchanged.
+
+### DEC-023 - Exercise write transactions and built-in removal (Codex, 2026-11-11)
+
+EXL-04 composes the existing search service with synchronous service-owned write transactions and injected Clock/IdGenerator ports. Create and update retain an outer transaction around repository writes and result reads. Deletion checks references and deletes in the same transaction. Repeating an archive state is a no-op.
+
+Custom hard-deletion is refused for routine or any workout reference. Built-ins use archive instead of hard delete, since the insert-if-missing catalog seed would recreate a deleted built-in at startup. Existing VALIDATION errors carry this archive suggestion. Renaming and archiving built-ins preserve their builtinKey. Session snapshots and workout sets remain unchanged by exercise edits.

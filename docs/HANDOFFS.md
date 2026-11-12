@@ -270,3 +270,43 @@ Light preview renders on the rebuilt Infinix. Metro is running on localhost:8083
 ### 2026-11-09 Codex - Native Figma composition follow-up
 
 Please apply NavigationChrome options and TabIcon callbacks and switch status bar text to dark. The user sees substantial extra space above the design from the /dev/preview native header. Please hide that route header for the approved exercise preview when appropriate, or expose a dev-only full-screen preview route. Codex has preserved app ownership. Preview data now supplies optional bestSets and sample session values, with real integrations still owned by EXL-05. Metro review currently runs on port 8084.
+
+## 2026-11-11 - Codex - Temporary solo engineering takeover
+
+The user explicitly authorized Codex to take over Claude Code's engineering tasks while Claude is unavailable. The ownership exception is recorded in AGENTS.md for this handover. Existing contracts, persistence layers and shared tracker remain the working structure.
+
+Audited the latest Claude session log (2026-11-10, clean tree, no pending edits), latest DS-09 font/SVG handoff and origin/main. GitHub PR #1 has merged the UI branch. Synchronized local main to b58faf6 and began work on codex/solo-takeover.
+
+Resolved the pending route requests: root uses dark status-bar text and shared header options, all five tabs use TabIcon, and dev/preview hides the redundant header. Migrated preview safe-area handling to the installed safe-area-context provider. Typecheck, lint, setup verification and all 122 tests pass. Infinix is disconnected, so native navigation verification remains pending under DS-06.
+
+Next engineering slice is EXL-02 catalog seeding followed by EXL-03/04 services and EXL-05 adapters. No service implementation or catalog work was present in the audited checkout. No commit or push performed in this takeover pass.
+
+## 2026-11-11 - Codex - EXL-02 catalog and startup seeding implemented
+
+Added 65 original exercise definitions spanning all 19 muscle ids, 19 equipment ids and four tracking types. The prior Figma exercise counts remain illustrative. Data is local TypeScript and needs no dependency or database schema change.
+
+Built-in entries carry fixed v4 UUIDs and stable builtinKey values. Retain these identities on future catalog edits. seedExercises validates catalog identities, reads existing keys and inserts missing rows and muscle links in one synchronous transaction using the existing repository. There is no version marker: subsequent startups perform a read/check and skip existing keys, so interrupted attempts retry safely and upgrades add only missing definitions. Existing exercises remain unchanged, including user edits and archive choices.
+
+client.ts invokes the seed after migration completion and before DatabaseGate receives the database. Seed failures roll back completely, use a safe PERSISTENCE error and close the connection through the existing startup cleanup.
+
+Verification: five catalog integration tests pass on the real Drizzle expo driver over node:sqlite. Full project typecheck/lint and 14 suites / 127 tests pass. Infinix is disconnected; native initial/repeat startup and seed duration remain pending. EXL-02 is In Review. The Exercises tab still uses its placeholder and the preview remains mock-backed until EXL-05 integration.
+
+Next work is EXL-03 search/filter service and EXL-04 custom exercise operations, followed by EXL-05 adapters. No commit or push performed.
+
+## 2026-11-11 - Codex - EXL-03 complete
+
+createExerciseSearchService in src/services/exerciseSearchService.ts supplies the list portion of ExerciseService, taking the existing repository as its only dependency. It validates the existing filter schema, applies trimmed literal name substring search with Unicode NFC/lowercase normalization, combines muscle/equipment filters, matches secondary muscles and excludes archived rows by default. It preserves repository ordering and translates read failures into a safe PERSISTENCE error. The exported interface remains unchanged.
+
+For the 65-entry catalog, filtering the existing repository result avoids new database queries or schema/index changes. EXL-04 should compose these reads with its mutation methods; EXL-05 should expose the service through adapter hooks. No placeholder mutation implementations were added.
+
+Verification: 13 real-SQLite integration checks cover search, independent/combined predicates, empty results, archived inclusion/exclusion, custom/Unicode/punctuation names, invalid input and safe error translation. Strict typecheck, lint and 15 suites / 140 tests pass. EXL-03 is Done. EXL-02 retains its native timing follow-up, and the development UI remains mock-backed until EXL-05. No commit or push performed.
+
+## 2026-11-11 - Codex - EXL-04 complete
+
+createExerciseService(db, { clock, ids }) implements every existing ExerciseService method and composes the EXL-03 search factory. Repository references/remove methods support service-owned synchronous check/delete transactions. Public types and database schemas are unchanged. Clock and UUID v4 remain injected; EXL-05 will provide runtime implementations and route adapters.
+
+Create/edit operations use the existing Zod schemas. Empty edits preserve timestamps. Repeated archive/restore calls are idempotent. Routine/history references survive edits and archive, and custom hard-delete is refused when referenced by a routine or any session. Built-in delete directs the caller to archive, preventing startup seed recreation. All low-level failures retain their cause and expose safe messages.
+
+Adapters must still confirm draft cancellation and explain that muscle edits change live historical muscle attribution (DEC-013). Keep examples isolated until adapters exist. EXL-05 is Ready. Catalog native seed timing and integrated phone journeys remain pending.
+
+Verification: 25 new SQLite integration tests cover metadata/defaults, validation, field clearing, atomic create/edit rollback, retry, concurrent partial edits, archive/restore, routine/session protection, snapshot/set preservation, invalid/missing ids, dependency errors and UUID collision. Typecheck/lint and 16 suites / 165 tests pass. No commit or push performed.

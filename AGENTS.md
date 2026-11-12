@@ -28,6 +28,8 @@ When asked for progress, report completed UI/UX features, current work, blockers
 
 ## Ownership and collaboration
 
+On 11 November 2026, the user authorized Codex to temporarily take over Claude Code's engineering work while Claude is unavailable. During this handover, Codex may update the existing architecture, services, persistence, contracts, route configuration and their task evidence as needed for ATLAS. Preserve the established layers and shared tracker, and document completed work and open decisions in HANDOFFS for Claude's return. Git attribution and push approval rules still apply.
+
 - Codex owns design tokens, UI components, presentation, animations, accessibility and UI tests.
 - Claude Code owns architecture, domain types, services, database/migrations, persistence, application state, routing configuration, Expo/build configuration and dependency versions.
 - Consume agreed TypeScript interfaces through existing hooks and service adapters. Never query SQLite in components. Never introduce a second store, router or theme system.
